@@ -1,11 +1,28 @@
 package com.algaworks.di.notificacao;
 
 import com.algaworks.di.modelo.Cliente;
+public class NotificadorEmail implements Notificador {
 
-public class NotificadorEmail implements Notificador{
+  private boolean caixaAlta;
+  private final String hostServidorSmtp;
+
+  public NotificadorEmail(String hostServidorSmtp) {
+    this.hostServidorSmtp = hostServidorSmtp;
+    System.out.println("NotificadorEmail");
+  }
+
   @Override
   public void notificar(Cliente cliente, String mensagem) {
-    System.out.printf("Notificando %s através do e-mail %s: %s\n",
-            cliente.getNome(), cliente.getEmail(), mensagem);
+    if (this.caixaAlta) {
+      mensagem = mensagem.toUpperCase();
+    }
+
+    System.out.printf("Notificando %s através do e-mail %s usando SMTP %s: %s\n",
+            cliente.getNome(), cliente.getEmail(), this.hostServidorSmtp, mensagem);
   }
+
+  public void setCaixaAlta(boolean caixaAlta) {
+    this.caixaAlta = caixaAlta;
+  }
+
 }
