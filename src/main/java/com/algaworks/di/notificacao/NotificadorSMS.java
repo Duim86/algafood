@@ -3,7 +3,7 @@ package com.algaworks.di.notificacao;
 import com.algaworks.di.modelo.Cliente;
 import org.springframework.stereotype.Component;
 
-@TipoDoNotificador(NivelUrgencia.NORMAL)
+@TipoDoNotificador(NivelUrgencia.SEM_PRIORIDADE)
 @Component
 public class NotificadorSMS implements Notificador {
 
