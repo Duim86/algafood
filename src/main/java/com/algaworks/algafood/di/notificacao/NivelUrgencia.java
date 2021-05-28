@@ -1,4 +1,4 @@
-package com.algaworks.di.notificacao;
+package com.algaworks.algafood.di.notificacao;
 
 public enum NivelUrgencia {
   URGENTE,

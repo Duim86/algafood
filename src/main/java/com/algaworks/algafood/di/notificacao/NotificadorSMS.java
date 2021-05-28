@@ -1,6 +1,6 @@
-package com.algaworks.di.notificacao;
+package com.algaworks.algafood.di.notificacao;
 
-import com.algaworks.di.modelo.Cliente;
+import com.algaworks.algafood.di.modelo.Cliente;
 import org.springframework.stereotype.Component;
 
 @TipoDoNotificador(NivelUrgencia.SEM_PRIORIDADE)

@@ -1,7 +1,7 @@
-package com.algaworks.controller;
+package com.algaworks.algafood.controller;
 
-import com.algaworks.di.modelo.Cliente;
-import com.algaworks.di.service.AtivacaoClienteService;
+import com.algaworks.algafood.di.modelo.Cliente;
+import com.algaworks.algafood.di.service.AtivacaoClienteService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
