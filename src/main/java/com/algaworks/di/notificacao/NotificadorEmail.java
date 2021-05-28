@@ -3,7 +3,7 @@ package com.algaworks.di.notificacao;
 import com.algaworks.di.modelo.Cliente;
 import org.springframework.stereotype.Component;
 
-@Component
+//@Component
 public class NotificadorEmail implements Notificador {
 
   public NotificadorEmail() {
