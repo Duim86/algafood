@@ -10,12 +10,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping
 @RestController
 public class MeuPrimeiroController {
-  private AtivacaoClienteService ativacaoClienteService;
+  private final AtivacaoClienteService ativacaoClienteService;
 
   public MeuPrimeiroController(AtivacaoClienteService ativacaoClienteService) {
     this.ativacaoClienteService = ativacaoClienteService;
-
-    System.out.println("MeuPrimeiroController: " + ativacaoClienteService);
   }
 
   @GetMapping("/hello")
