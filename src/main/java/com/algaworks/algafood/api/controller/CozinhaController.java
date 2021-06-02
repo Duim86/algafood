@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping(value = "/cozinhas")
@@ -27,21 +28,21 @@ public class CozinhaController {
 
   @GetMapping()
   public List<Cozinha> listar() {
-    return cozinhaRepository.listar();
+    return cozinhaRepository.findAll();
   }
 
   @GetMapping(produces = MediaType.APPLICATION_XML_VALUE)
   public CozinhasXmlWrapper listarXml() {
-    return new CozinhasXmlWrapper(cozinhaRepository.listar());
+    return new CozinhasXmlWrapper(cozinhaRepository.findAll());
   }
 
   @GetMapping("/{cozinhaId}")
   public ResponseEntity<Cozinha> buscar(@PathVariable Long cozinhaId) {
-    Cozinha cozinha = cozinhaRepository.buscar(cozinhaId);
-    if(cozinha != null) {
-      return ResponseEntity.ok((cozinha));
-    }
-    return ResponseEntity.notFound().build();
+    Optional<Cozinha> cozinha = cozinhaRepository.findById(cozinhaId);
+//    if(cozinha.isPresent()) {
+//      return ResponseEntity.ok((cozinha.get()));
+//    } Esse código é substituido pelo abaixo.
+    return cozinha.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
   }
 
   @PostMapping
@@ -54,14 +55,14 @@ public class CozinhaController {
   public ResponseEntity<Cozinha> atualizar(@RequestBody Cozinha cozinha,
                                            @PathVariable Long cozinhaId) {
 
-    Cozinha cozinhaAtual = (cozinhaRepository.buscar(cozinhaId));
+    Optional<Cozinha> cozinhaAtual = (cozinhaRepository.findById(cozinhaId));
 
-    if (cozinhaAtual != null) {
-      BeanUtils.copyProperties(cozinha, cozinhaAtual, "id");
+    if (cozinhaAtual.isPresent()) {
+      BeanUtils.copyProperties(cozinha, cozinhaAtual.get(), "id");
 
-      cadastroCozinha.salvar(cozinhaAtual);
+      Cozinha cozinhaSalva = cadastroCozinha.salvar(cozinhaAtual.get());
 
-      return ResponseEntity.ok(cozinhaAtual);
+      return ResponseEntity.ok(cozinhaSalva);
     } else {
       return ResponseEntity.notFound().build();
     }

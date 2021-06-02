@@ -26,12 +26,12 @@ public class EstadoController {
   @ResponseStatus(HttpStatus.OK)
   @GetMapping
   public List<Estado> listar() {
-    return estadoRepository.listar();
+    return estadoRepository.findAll();
   }
 
   @GetMapping("/{estadoId}")
   public ResponseEntity<Estado> buscar(@PathVariable Long estadoId){
-    Estado estado = estadoRepository.buscar(estadoId);
+    Estado estado = estadoRepository.findById(estadoId).orElse(null);
 
     if(estado == null) {
       return ResponseEntity.notFound().build();
@@ -49,7 +49,7 @@ public class EstadoController {
   public ResponseEntity<?> atualizar(@RequestBody Estado estado,
                                      @PathVariable Long estadoId) {
 
-    Estado estadoAtual = (estadoRepository.buscar(estadoId));
+    Estado estadoAtual = estadoRepository.findById(estadoId).orElse(null);
 
     if (estadoAtual != null) {
       BeanUtils.copyProperties(estado, estadoAtual, "id");
