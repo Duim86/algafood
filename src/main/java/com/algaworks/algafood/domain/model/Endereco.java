@@ -17,22 +17,22 @@ import javax.persistence.ManyToOne;
 public class Endereco {
 
   @JoinColumn(name = "endereco_cep")
-  private String cep;
+  private String endereco_cep;
 
   @JoinColumn(name = "endereco_logradouro")
-  private String logradouro;
+  private String endereco_logradouro;
 
   @JoinColumn(name = "endereco_numero")
-  private String numero;
+  private String endereco_numero;
 
   @JoinColumn(name = "endereco_complemento")
-  private String complemento;
+  private String endereco_complemento;
 
   @JoinColumn(name = "endereco_bairro")
-  private String bairro;
+  private String endereco_bairro;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "endereco_cidade_id")
-  private Cidade cidade;
+  private Cidade endereco_cidade;
 
 }
