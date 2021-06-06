@@ -12,6 +12,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.server.ServerWebInputException;
 
 import java.util.List;
 import java.util.Optional;
@@ -68,17 +70,29 @@ public class CozinhaController {
     }
   }
 
+//  @DeleteMapping("/{cozinhaId}")
+//  public ResponseEntity<?> remover(@PathVariable Long cozinhaId) {
+//    try {
+//      cadastroCozinha.excluir(cozinhaId);
+//      return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+//
+//    } catch (EntidadeNaoEncontradaException e) {
+//     return ResponseEntity.notFound().build();
+//
+//    } catch (EntidadeEmUsoException e) {
+//      return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+//    }
+//  }
+
   @DeleteMapping("/{cozinhaId}")
-  public ResponseEntity<?> remover(@PathVariable Long cozinhaId) {
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  public void remover(@PathVariable Long cozinhaId) {
     try {
       cadastroCozinha.excluir(cozinhaId);
-      return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-
     } catch (EntidadeNaoEncontradaException e) {
-      return ResponseEntity.notFound().build();
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+//      throw new ServerWebInputException(e.getMessage());
 
-    } catch (EntidadeEmUsoException e) {
-      return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
     }
   }
 }
