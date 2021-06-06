@@ -7,9 +7,7 @@ import com.algaworks.algafood.domain.repository.CozinhaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 @Service
 public class CadastroCozinhaService {
@@ -26,11 +24,8 @@ public class CadastroCozinhaService {
   public void excluir(Long cozinhaId) {
     try {
       cozinhaRepository.deleteById(cozinhaId);
-    } catch (EmptyResultDataAccessException e) {
-//      Classe servicço não sabe código Status HTTP.
-//      throw new ResponseStatusException(HttpStatus.NOT_FOUND,
-//              String.format("Cozinha de código %d não pode ser encontrada", cozinhaId));
 
+    } catch (EmptyResultDataAccessException e) {
       throw new EntidadeNaoEncontradaException(
               String.format(MSG_COZINHA_NOTFOUND, cozinhaId));
 
@@ -41,7 +36,7 @@ public class CadastroCozinhaService {
   }
 
   public Cozinha buscarOuFalhar(Long cozinhaId) {
-    Cozinha cozinha = cozinhaRepository.findById(cozinhaId)
-            .orElseThrow(() -> new EntidadeNaoEncontradaException(MSG_COZINHA_NOTFOUND));
+    return cozinhaRepository.findById(cozinhaId)
+            .orElseThrow(() -> new EntidadeNaoEncontradaException(String.format(MSG_COZINHA_NOTFOUND, cozinhaId)));
   }
 }

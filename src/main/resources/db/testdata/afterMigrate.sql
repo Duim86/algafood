@@ -61,11 +61,11 @@ values ('Thai Food', 0, 1, utc_timestamp, utc_timestamp, 'Água Verde', '80320-2
 INSERT INTO restaurante (nome, taxa_frete, cozinha_id, data_cadastro, data_atualizacao, endereco_bairro, endereco_cep, endereco_complemento,
                          endereco_logradouro, endereco_numero, endereco_cidade_id)
 values ('Indian Food', 10.5, 2, utc_timestamp, utc_timestamp, 'Água Verde', '80320-20', 'loja 1',
-        'Avenida República Argentina', '2000', 1);
+        'Avenida República Argentina', '2000', 2);
 INSERT INTO restaurante (nome, taxa_frete, cozinha_id, data_cadastro, data_atualizacao, endereco_bairro, endereco_cep, endereco_complemento,
                          endereco_logradouro, endereco_numero, endereco_cidade_id)
 values ('Japan Sushi', 12.35, 3, utc_timestamp, utc_timestamp, 'Água Verde', '80320-20', 'loja 1',
-        'Avenida República Argentina', '2000', 1);
+        'Avenida República Argentina', '2000', 3);
 
 INSERT INTO produto (ativo, descricao, nome, preco, restaurante_id)
 VALUES (true, 'Água 500ml Ouro Fino', 'Água', 2.75, 1);

@@ -35,10 +35,6 @@ public class Restaurante {
   @JoinColumn(name = "cozinha_id", nullable = false)
   private Cozinha cozinha;
 
-  @JsonIgnore
-  @OneToMany(mappedBy = "restaurante")
-  //to Many é padrão Lazy
-  private List<Produto> produtos = new ArrayList<>();
 
   @JsonIgnore
   @Embedded
@@ -46,18 +42,23 @@ public class Restaurante {
 
   @JsonIgnore
   @CreationTimestamp
-  @Column(nullable = false)
+  @Column(nullable = false, columnDefinition = "datetime")
   private LocalDateTime dataCadastro;
 
   @JsonIgnore
   @UpdateTimestamp
-  @Column(nullable = false)
+  @Column(nullable = false, columnDefinition = "datetime")
   private LocalDateTime dataAtualizacao;
 
-  //@JsonIgnore
+  @JsonIgnore
   @ManyToMany
   @JoinTable(name = "restaurante_forma_pagamento",
           joinColumns = @JoinColumn(name = "restaurante_id"),
           inverseJoinColumns = @JoinColumn(name = "forma_pagamento_id"))
   private List<FormaDePagamento> formasDePagamento = new ArrayList<>();
+
+  @JsonIgnore
+  @OneToMany(mappedBy = "restaurante")
+  //to Many é padrão Lazy
+  private List<Produto> produtos = new ArrayList<>();
 }
