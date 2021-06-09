@@ -1,13 +1,13 @@
 package com.algaworks.algafood.domain.exception;
 
-public class EstadoNaoEncontradoException extends EntidadeNaoEncontradaException {
+public class CidadeNaoEncontradaException extends EntidadeNaoEncontradaException {
   public static final long serialVersionUID = 1L;
 
-  public EstadoNaoEncontradoException(String mensagem) {
+  public CidadeNaoEncontradaException(String mensagem) {
     super(mensagem);
   }
 
-  public EstadoNaoEncontradoException(Long estadoId) {
-    this("Não existe um cadastro de estado com código " + estadoId);
+  public CidadeNaoEncontradaException(Long estadoId) {
+    this("Não existe um cadastro de cidade com código " + estadoId);
   }
 }
