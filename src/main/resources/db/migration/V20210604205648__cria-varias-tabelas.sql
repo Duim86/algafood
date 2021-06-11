@@ -55,12 +55,12 @@ create table restaurante
     data_atualizacao     datetime       not null,
     data_cadastro        datetime       not null,
 
-    endereco_cidade_id   bigint not null,
-    endereco_cep         varchar(9) not null,
-    endereco_logradouro  varchar(100) not null,
-    endereco_numero      varchar(20) not null,
+    endereco_cidade_id   bigint,
+    endereco_cep         varchar(9),
+    endereco_logradouro  varchar(100),
+    endereco_numero      varchar(20),
     endereco_complemento varchar(60),
-    endereco_bairro      varchar(60) not null,
+    endereco_bairro      varchar(60),
 
     primary key (id)
 ) engine = InnoDB
