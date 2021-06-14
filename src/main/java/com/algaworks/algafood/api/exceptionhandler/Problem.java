@@ -5,25 +5,25 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import lombok.Builder;
 import lombok.Getter;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.List;
 
 @JsonInclude(Include.NON_NULL)
 @Getter
 @Builder
 public class Problem {
-  private LocalDateTime timestamp;
-  private Integer status;
-  private String type;
-  private String title;
-  private String detail;
-  private String userMessage;
-  private List<Object> objects;
+  private final OffsetDateTime timestamp;
+  private final Integer status;
+  private final String type;
+  private final String title;
+  private final String detail;
+  private final String userMessage;
+  private final List<Object> objects;
 
   @Getter
   @Builder
   public static class Object {
-    private String name;
-    private String userMessage;
+    private final String name;
+    private final String userMessage;
   }
 }
