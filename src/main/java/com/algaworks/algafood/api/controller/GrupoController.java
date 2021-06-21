@@ -35,13 +35,13 @@ public class GrupoController {
 
   @ResponseStatus(HttpStatus.OK)
   @GetMapping
-  public List<Grupo> listar() {
-    return grupoRepository.findAll();
+  public List<GrupoModel> listar() {
+    return grupoModelAssembler.toCollectionModel(grupoRepository.findAll());
   }
 
   @GetMapping("/{grupoId}")
-  public Grupo buscar(@PathVariable Long grupoId) {
-    return cadastroGrupo.buscarOuFalhar(grupoId);
+  public GrupoModel buscar(@PathVariable Long grupoId) {
+    return grupoModelAssembler.toModel(cadastroGrupo.buscarOuFalhar(grupoId));
   }
 
   @PostMapping

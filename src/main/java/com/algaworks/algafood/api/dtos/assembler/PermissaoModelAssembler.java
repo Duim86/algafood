@@ -1,7 +1,7 @@
 package com.algaworks.algafood.api.dtos.assembler;
 
-import com.algaworks.algafood.api.model.UsuarioModel;
-import com.algaworks.algafood.domain.model.Usuario;
+import com.algaworks.algafood.api.model.PermissaoModel;
+import com.algaworks.algafood.domain.model.Permissao;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -12,19 +12,19 @@ import java.util.stream.Collectors;
 
 
 @Component
-public class UsuarioModelAssembler {
+public class PermissaoModelAssembler {
 
   @Autowired
   private ModelMapper modelMapper;
 
 
 
-  public UsuarioModel toModel(Usuario usuario) {
-    return modelMapper.map(usuario, UsuarioModel.class);
+  public PermissaoModel toModel(Permissao permissao) {
+    return modelMapper.map(permissao, PermissaoModel.class);
   }
 
-  public List<UsuarioModel> toCollectionModel(Collection<Usuario> usuarios){
-    return usuarios.stream()
+  public List<PermissaoModel> toCollectionModel(Collection<Permissao> permissoes){
+    return permissoes.stream()
             .map(this::toModel)
             .collect(Collectors.toList());
   }

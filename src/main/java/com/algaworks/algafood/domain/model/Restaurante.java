@@ -39,6 +39,8 @@ public class Restaurante {
 
   private Boolean ativo = Boolean.TRUE;
 
+  private Boolean aberto = Boolean.FALSE;
+
   @CreationTimestamp
   @Column(nullable = false, columnDefinition = "datetime", updatable = false)
   private OffsetDateTime dataCadastro;
@@ -52,6 +54,12 @@ public class Restaurante {
           joinColumns = @JoinColumn(name = "restaurante_id"),
           inverseJoinColumns = @JoinColumn(name = "forma_pagamento_id"))
   private Set<FormaDePagamento> formasDePagamento = new HashSet<>();
+
+  @ManyToMany
+  @JoinTable(name = "restaurante_usuario_responsavel",
+          joinColumns = @JoinColumn(name = "restaurante_id"),
+          inverseJoinColumns = @JoinColumn(name = "usuario_id"))
+  private Set<Usuario> responsaveis = new HashSet<>();
 
   @OneToMany(mappedBy = "restaurante")
   //to Many é padrão Lazy
@@ -72,4 +80,30 @@ public class Restaurante {
   public void removerFormaPagamento(FormaDePagamento formaDePagamento) {
     getFormasDePagamento().remove(formaDePagamento);
   }
+
+  public void adicionarResponsavel(Usuario usuario) {
+    getResponsaveis().add(usuario);
+  }
+
+  public void removerResponsavel(Usuario usuario) {
+    getResponsaveis().remove(usuario);
+  }
+
+  public void abrir() {
+    setAberto(true);
+  }
+
+  public void fechar() {
+    setAberto(false);
+  }
+
+  public boolean aceitaFormaDePagamento(FormaDePagamento formaDePagamento) {
+    return getFormasDePagamento().contains(formaDePagamento);
+  }
+
+  public boolean naoAceitaFormaDePagamento(FormaDePagamento formaDePagamento) {
+    return !aceitaFormaDePagamento(formaDePagamento);
+  }
+
+
 }

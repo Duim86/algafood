@@ -24,6 +24,13 @@ delete
 from usuario;
 delete
 from usuario_grupo;
+delete
+from restaurante_usuario_responsavel;
+delete
+from pedido;
+delete
+from item_pedido;
+
 
 set foreign_key_checks = 1;
 
@@ -51,6 +58,12 @@ alter table usuario
     auto_increment = 1;
 alter table usuario_grupo
     auto_increment = 1;
+alter table restaurante_usuario_responsavel
+    auto_increment = 1;
+alter table pedido
+    auto_increment = 1;
+alter table item_pedido
+    auto_increment = 1;
 
 INSERT INTO cozinha (id, nome)
 VALUES (1, 'Tailandesa'),
@@ -69,18 +82,17 @@ VALUES (1, 'Foz do Iguaçu', 1),
        (4, 'Curitiba', 1),
        (5, 'Belo Horizonte', 3);
 
-
 INSERT INTO restaurante (nome, taxa_frete, cozinha_id, data_cadastro, data_atualizacao, endereco_bairro, endereco_cep,
                          endereco_complemento,
-                         endereco_logradouro, endereco_numero, endereco_cidade_id, ativo)
+                         endereco_logradouro, endereco_numero, endereco_cidade_id, ativo, aberto)
 VALUES ('Thai Food', 0, 1, utc_timestamp, utc_timestamp, 'Água Verde', '80320-20', 'loja 1',
-        'Avenida República Argentina', '2000', 1, true),
+        'Avenida República Argentina', '2000', 1, true, true),
 
        ('Indian Food', 10.5, 2, utc_timestamp, utc_timestamp, 'Água Verde', '80320-20', 'loja 1',
-        'Avenida República Argentina', '2000', 2, true),
+        'Avenida República Argentina', '2000', 2, true, true),
 
        ('Japan Sushi', 12.35, 3, utc_timestamp, utc_timestamp, 'Água Verde', '80320-20', 'loja 1',
-        'Avenida República Argentina', '2000', 3, true);
+        'Avenida República Argentina', '2000', 3, true, true);
 
 INSERT INTO produto (ativo, descricao, nome, preco, restaurante_id)
 VALUES (true, 'Água 500ml Ouro Fino', 'Água', 2.75, 1),
@@ -105,15 +117,55 @@ VALUES (1, 1),
        (2, 1);
 
 
-INSERT INTO grupo (nome)
-VALUES ('Gerente'),
-       ('Secretária'),
-       ('Cadastrador');
+INSERT INTO grupo (id, nome)
+VALUES (1, 'Gerente'),
+       (2, 'Secretária'),
+       (3, 'Cadastrador');
 
-INSERT INTO usuario(data_cadastro, email, nome, senha)
-VALUES (utc_timestamp, 'zanlorenzi@gmail.com', 'Alexandre Zanlorenzi', '123'),
-       (utc_timestamp, 'azanlorenzi@yahoo.com', 'Alexandre Zanlorenzi', '123'),
-       (utc_timestamp, 'android.duim@gmail.com', 'Alexandre Zanlorenzi', '123');
+INSERT INTO permissao (id, nome, descricao)
+VALUES (1, 'CONSULTAR_COZINHA', 'Permite consultar cozinha'),
+       (2, 'CADASTRAR_COZINHA', 'Permite cadastrar cozinha'),
+       (3, 'CADASTRAR_RESTAURANTE', 'Permite cadastrar restaurante');
+
+INSERT INTO grupo_permissao (grupo_id, permissao_id)
+VALUES (1, 1),
+       (1, 2),
+       (2, 2),
+       (3, 3),
+       (3, 1),
+       (2, 1);
+
+
+INSERT INTO usuario(id, data_cadastro, email, nome, senha)
+VALUES (1, utc_timestamp, 'zanlorenzi@gmail.com', 'Alexandre Zanlorenzi', '123'),
+       (2, utc_timestamp, 'azanlorenzi@yahoo.com', 'Alexandre Zanlorenzi', '123'),
+       (3, utc_timestamp, 'android.duim@gmail.com', 'Alexandre Zanlorenzi', '123'),
+       (4, utc_timestamp, 'Manoel Lima', 'manoel.loja@gmail.com', '123');
+
+INSERT INTO usuario_grupo (usuario_id, grupo_id)
+VALUES (1, 1),
+       (1, 2),
+       (2, 2),
+       (3, 3),
+       (3, 1),
+       (2, 1);
+
+INSERT INTO restaurante_usuario_responsavel (restaurante_id, usuario_id)
+VALUES (1, 4),
+       (3, 4);
+
+INSERT INTO pedido (id, restaurante_id, cliente_id, forma_de_pagamento_id, endereco_cidade_id, endereco_cep,
+                    endereco_logradouro, endereco_numero, endereco_complemento, endereco_bairro,
+                    status, data_criacao, subtotal, taxa_frete, valor_total)
+VALUES (2, 3, 1, 2, 1, '38400-111', 'Rua Acre', '300', 'Casa 2', 'Centro',
+        'CRIADO', utc_timestamp, 79, 0, 79),
+       (1, 1, 1, 1, 1, '38400-000', 'Rua Floriano Peixoto', '500', 'Apto 801', 'Brasil',
+        'CRIADO', utc_timestamp, 298.90, 10, 308.90);
+
+INSERT INTO item_pedido (id, pedido_id, produto_id, quantidade, preco_unitario, preco_total, observacao)
+VALUES (3, 2, 6, 1, 79, 79, 'Ao ponto'),
+       (2, 1, 2, 2, 110, 220, 'Menos picante, por favor'),
+       (1, 1, 1, 1, 78.9, 78.9, null);
 
 
 

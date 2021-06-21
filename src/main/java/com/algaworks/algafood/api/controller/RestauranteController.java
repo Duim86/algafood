@@ -1,12 +1,13 @@
 package com.algaworks.algafood.api.controller;
 
-import com.algaworks.algafood.api.model.RestauranteModel;
-import com.algaworks.algafood.api.dtos.disassembler.RestauranteInputDisassembler;
 import com.algaworks.algafood.api.dtos.assembler.RestauranteModelAssembler;
+import com.algaworks.algafood.api.dtos.disassembler.RestauranteInputDisassembler;
+import com.algaworks.algafood.api.model.RestauranteModel;
 import com.algaworks.algafood.api.model.input.RestauranteInput;
 import com.algaworks.algafood.domain.exception.CidadeNaoEncontradaException;
 import com.algaworks.algafood.domain.exception.CozinhaNaoEncontradaException;
 import com.algaworks.algafood.domain.exception.NegocioException;
+import com.algaworks.algafood.domain.exception.RestauranteNaoEncontradoException;
 import com.algaworks.algafood.domain.model.Restaurante;
 import com.algaworks.algafood.domain.repository.RestauranteRepository;
 import com.algaworks.algafood.domain.service.CadastroRestauranteService;
@@ -46,7 +47,7 @@ public class RestauranteController {
   @GetMapping("/{restauranteId}")
   public RestauranteModel buscar(@PathVariable Long restauranteId) {
 
-    Restaurante restaurante =  cadastroRestaurante.buscarOuFalhar(restauranteId);
+    Restaurante restaurante = cadastroRestaurante.buscarOuFalhar(restauranteId);
 
     return restauranteModelAssembler.toModel(restaurante);
   }
@@ -54,7 +55,7 @@ public class RestauranteController {
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
   public RestauranteModel adicionar(@RequestBody
-                                 @Valid RestauranteInput restauranteInput) {
+                                    @Valid RestauranteInput restauranteInput) {
     try {
       Restaurante restaurante = restauranteInputDisassembler.toDomainObject(restauranteInput);
       return restauranteModelAssembler.toModel(cadastroRestaurante.salvar(restaurante));
@@ -65,7 +66,7 @@ public class RestauranteController {
 
   @PutMapping("/{restauranteId}")
   public RestauranteModel atualizar(@PathVariable Long restauranteId,
-                               @RequestBody @Valid RestauranteInput restauranteInput) {
+                                    @RequestBody @Valid RestauranteInput restauranteInput) {
 //    Restaurante restaurante = restauranteInputDisassembler.toDomainObject(restauranteInput);
     Restaurante restauranteAtual = cadastroRestaurante.buscarOuFalhar(restauranteId);
 
@@ -79,6 +80,7 @@ public class RestauranteController {
       throw new NegocioException(e.getMessage());
     }
   }
+
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @DeleteMapping("/{restauranteId}")
   public void remover(@PathVariable Long restauranteId) {
@@ -96,6 +98,40 @@ public class RestauranteController {
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public void inativar(@PathVariable Long restauranteId) {
     cadastroRestaurante.inativar(restauranteId);
+  }
+
+
+  @PutMapping("/ativacoes")
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  public void ativarEmMassa(@RequestBody List<Long> restauranteIds) {
+    try {
+      cadastroRestaurante.ativar(restauranteIds);
+    } catch (RestauranteNaoEncontradoException e) {
+      throw new NegocioException(e.getMessage(), e);
+    }
+  }
+
+  @DeleteMapping("/ativacoes")
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  public void inativarEmMassa(@RequestBody List<Long> restauranteIds) {
+    try {
+      cadastroRestaurante.inativar(restauranteIds);
+    } catch (RestauranteNaoEncontradoException e) {
+      throw new NegocioException(e.getMessage(), e);
+    }
+  }
+
+
+  @PutMapping("/{restauranteId}/abertura")
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  public void abrir(@PathVariable Long restauranteId) {
+    cadastroRestaurante.abrir(restauranteId);
+  }
+
+  @PutMapping("/{restauranteId}/fechamento")
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  public void fechar(@PathVariable Long restauranteId) {
+    cadastroRestaurante.fechar(restauranteId);
   }
 
 //  @PatchMapping("/{restauranteId}")
