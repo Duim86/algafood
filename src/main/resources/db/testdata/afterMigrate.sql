@@ -154,12 +154,12 @@ INSERT INTO restaurante_usuario_responsavel (restaurante_id, usuario_id)
 VALUES (1, 4),
        (3, 4);
 
-INSERT INTO pedido (id, restaurante_id, cliente_id, forma_de_pagamento_id, endereco_cidade_id, endereco_cep,
+INSERT INTO pedido (id, codigo, restaurante_id, cliente_id, forma_de_pagamento_id, endereco_cidade_id, endereco_cep,
                     endereco_logradouro, endereco_numero, endereco_complemento, endereco_bairro,
                     status, data_criacao, subtotal, taxa_frete, valor_total)
-VALUES (2, 3, 1, 2, 1, '38400-111', 'Rua Acre', '300', 'Casa 2', 'Centro',
+VALUES (2,'5b084069-ff49-4549-8a53-748ee33979ff', 3, 1, 2, 1, '38400-111', 'Rua Acre', '300', 'Casa 2', 'Centro',
         'CRIADO', utc_timestamp, 79, 0, 79),
-       (1, 1, 1, 1, 1, '38400-000', 'Rua Floriano Peixoto', '500', 'Apto 801', 'Brasil',
+       (1, 'b172992b-37a7-4a07-8e06-cf230bcb186a', 1, 1, 1, 1, '38400-000', 'Rua Floriano Peixoto', '500', 'Apto 801', 'Brasil',
         'CRIADO', utc_timestamp, 298.90, 10, 308.90);
 
 INSERT INTO item_pedido (id, pedido_id, produto_id, quantidade, preco_unitario, preco_total, observacao)

@@ -1,10 +1,12 @@
 package com.algaworks.algafood.domain.service;
 
+import com.algaworks.algafood.domain.exception.NegocioException;
 import com.algaworks.algafood.domain.exception.PedidoNaoEncontradoException;
-import com.algaworks.algafood.domain.model.Pedido;
+import com.algaworks.algafood.domain.model.*;
 import com.algaworks.algafood.domain.repository.PedidoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class EmissaoPedidoService {
@@ -12,8 +14,62 @@ public class EmissaoPedidoService {
   @Autowired
   private PedidoRepository pedidoRepository;
 
-  public Pedido buscarOuFalhar(Long pedidoId) {
-    return pedidoRepository.findById(pedidoId)
-            .orElseThrow(() -> new PedidoNaoEncontradoException(pedidoId));
+  @Autowired
+  private CadastroUsuarioService cadastroUsuario;
+
+  @Autowired
+  private CadastroProdutoService cadastroProduto;
+
+  @Autowired
+  private CadastroCidadeService cadastroCidade;
+
+  @Autowired
+  private CadastroRestauranteService cadastroRestaurante;
+
+  @Autowired
+  private CadastroFormaDePagamentoService formaDePagamentoService;
+
+  @Transactional
+  public Pedido salvar(Pedido pedido) {
+
+    validarItens(pedido);
+    validarPedido(pedido);
+
+    pedido.setTaxaFrete(pedido.getRestaurante().getTaxaFrete());
+    pedido.calcularValorTotal();
+
+    return pedidoRepository.save(pedido);
+  }
+
+  private void validarItens(Pedido pedido) {
+    pedido.getItens().forEach(item -> {
+      Produto produto = cadastroProduto.buscarOuFalhar(
+              pedido.getRestaurante().getId(), item.getProduto().getId());
+
+      item.setPedido(pedido);
+      item.setProduto(produto);
+      item.setPrecoUnitario(produto.getPreco());
+    });
+  }
+
+  public void validarPedido(Pedido pedido) {
+    Usuario usuario = cadastroUsuario.buscarOuFalhar(1L);
+    Restaurante restaurante = cadastroRestaurante.buscarOuFalhar(pedido.getRestaurante().getId());
+    Cidade cidade = cadastroCidade.buscarOuFalhar(pedido.getEnderecoEntrega().getCidade().getId());
+    FormaDePagamento formaDePagamento = formaDePagamentoService.buscarOuFalhar(pedido.getFormaDePagamento().getId());
+
+    pedido.setCliente(usuario);
+    pedido.getEnderecoEntrega().setCidade(cidade);
+    pedido.setFormaDePagamento(formaDePagamento);
+    pedido.setRestaurante(restaurante);
+
+    if(restaurante.naoAceitaFormaDePagamento(formaDePagamento)){
+      throw new NegocioException("Restaurante nao aceita " + formaDePagamento.getDescricao() + " como forma de pagamento!");
+    }
+  }
+
+  public Pedido buscarOuFalhar(String codigoPedido) {
+    return pedidoRepository.findByCodigo(codigoPedido)
+            .orElseThrow(() -> new PedidoNaoEncontradoException(codigoPedido));
   }
 }

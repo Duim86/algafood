@@ -10,5 +10,5 @@ public interface ProdutoRepository extends CustomJpaRepository<Produto, Long> {
 
   List<Produto> findAllByRestaurante(Restaurante restaurante);
 
-  Optional<Produto> findByIdAndRestauranteId(Long restauranteId, Long produtoId);
+  Optional<Produto> findByIdAndRestauranteId(Long produtoId, Long restauranteId);
 }
