@@ -1,4 +1,4 @@
-package com.algaworks.algafood.api;
+package com.algaworks.algafood.api.model;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -7,10 +7,10 @@ import lombok.Setter;
 @Setter
 public class EnderecoModel {
 
-  private String endereco_cep;
-  private String endereco_logradouro;
-  private String endereco_numero;
-  private String endereco_complemento;
-  private String endereco_bairro;
-//  private CidadeModel endereco_cidade;
+  private String cep;
+  private String logradouro;
+  private String numero;
+  private String complemento;
+  private String bairro;
+  private CidadeResumoModel cidade;
 }

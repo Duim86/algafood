@@ -1,10 +1,15 @@
 package com.algaworks.algafood.api.controller;
 
-import com.algaworks.algafood.domain.exception.EstadoNaoEncontradoException;
+import com.algaworks.algafood.api.dtos.assembler.GrupoModelAssembler;
+import com.algaworks.algafood.api.dtos.disassembler.GrupoInputDisassembler;
+import com.algaworks.algafood.api.model.GrupoModel;
+import com.algaworks.algafood.api.model.input.GrupoInput;
+import com.algaworks.algafood.domain.exception.GrupoNaoEncontradoException;
 import com.algaworks.algafood.domain.exception.NegocioException;
-import com.algaworks.algafood.domain.model.Cidade;
-import com.algaworks.algafood.domain.repository.CidadeRepository;
-import com.algaworks.algafood.domain.service.CadastroCidadeService;
+import com.algaworks.algafood.domain.model.Grupo;
+import com.algaworks.algafood.domain.model.Grupo;
+import com.algaworks.algafood.domain.repository.GrupoRepository;
+import com.algaworks.algafood.domain.service.CadastroGrupoService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,53 +19,54 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/cidades")
-public class CidadeController {
+@RequestMapping(value = "/grupos")
+public class GrupoController {
   @Autowired
-  private CidadeRepository cidadeRepository;
+  private GrupoRepository grupoRepository;
 
   @Autowired
-  private CadastroCidadeService cadastroCidade;
+  private CadastroGrupoService cadastroGrupo;
+
+  @Autowired
+  private GrupoModelAssembler grupoModelAssembler;
+
+  @Autowired
+  private GrupoInputDisassembler grupoInputDisassembler;
 
   @ResponseStatus(HttpStatus.OK)
   @GetMapping
-  public List<Cidade> listar() {
-    return cidadeRepository.findAll();
+  public List<Grupo> listar() {
+    return grupoRepository.findAll();
   }
 
-  @GetMapping("/{cidadeId}")
-  public Cidade buscar(@PathVariable Long cidadeId) {
-    return cadastroCidade.buscarOuFalhar(cidadeId);
+  @GetMapping("/{grupoId}")
+  public Grupo buscar(@PathVariable Long grupoId) {
+    return cadastroGrupo.buscarOuFalhar(grupoId);
   }
 
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
-  public Cidade adicionar(@RequestBody @Valid Cidade cidade) {
-    try {
-      return cadastroCidade.salvar(cidade);
-    } catch (EstadoNaoEncontradoException e) {
-      throw new NegocioException(e.getMessage());
-    }
+  public GrupoModel adicionar(@RequestBody @Valid GrupoInput grupoInput) {
+      Grupo grupo = grupoInputDisassembler.toDomainObject(grupoInput);
+      return grupoModelAssembler.toModel(cadastroGrupo.salvar(grupo));
   }
 
-  @PutMapping("/{cidadeId}")
-  @ResponseStatus(HttpStatus.OK)
-  public Cidade atualizar(@RequestBody @Valid Cidade cidade,
-                          @PathVariable Long cidadeId) {
+  @PutMapping("/{grupoId}")
+  public GrupoModel atualizar(@PathVariable Long grupoId,
+                              @RequestBody @Valid GrupoInput grupoInput) {
+    Grupo grupoAtual = cadastroGrupo.buscarOuFalhar(grupoId);
 
-    Cidade cidadeAtual = cadastroCidade.buscarOuFalhar(cidadeId);
-    BeanUtils.copyProperties(cidade, cidadeAtual, "id");
-    try {
-      return cadastroCidade.salvar(cidadeAtual);
-    } catch (EstadoNaoEncontradoException e) {
-      throw new NegocioException(e.getMessage(), e);
-    }
+    grupoInputDisassembler.copyToDomainObject(grupoInput, grupoAtual);
+
+    grupoAtual = cadastroGrupo.salvar(grupoAtual);
+
+    return grupoModelAssembler.toModel(grupoAtual);
   }
 
-  @DeleteMapping("/{cidadeId}")
+  @DeleteMapping("/{grupoId}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  public void remover(@PathVariable Long cidadeId) {
-    cadastroCidade.excluir(cidadeId);
+  public void remover(@PathVariable Long grupoId) {
+    cadastroGrupo.excluir(grupoId);
   }
 }
 

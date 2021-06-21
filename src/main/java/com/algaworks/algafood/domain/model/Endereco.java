@@ -5,10 +5,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Embeddable;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 
 @Getter
 @Setter
@@ -16,23 +13,23 @@ import javax.persistence.ManyToOne;
 @Embeddable
 public class Endereco {
 
-  @JoinColumn(name = "endereco_cep")
-  private String endereco_cep;
+  @Column(name = "endereco_cep")
+  private String cep;
 
-  @JoinColumn(name = "endereco_logradouro")
-  private String endereco_logradouro;
+  @Column(name = "endereco_logradouro")
+  private String logradouro;
 
-  @JoinColumn(name = "endereco_numero")
-  private String endereco_numero;
+  @Column(name = "endereco_numero")
+  private String numero;
 
-  @JoinColumn(name = "endereco_complemento")
-  private String endereco_complemento;
+  @Column(name = "endereco_complemento")
+  private String complemento;
 
-  @JoinColumn(name = "endereco_bairro")
-  private String endereco_bairro;
+  @Column(name = "endereco_bairro")
+  private String bairro;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "endereco_cidade_id")
-  private Cidade endereco_cidade;
+  private Cidade cidade;
 
 }

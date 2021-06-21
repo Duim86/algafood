@@ -1,13 +1,13 @@
 package com.algaworks.algafood.domain.exception;
 
-public class GrupoNaoEncontradoException extends EntidadeNaoEncontradaException {
+public class UsuarioNaoEncontradoException extends EntidadeNaoEncontradaException {
   public static final long serialVersionUID = 1L;
 
-  public GrupoNaoEncontradoException(String mensagem) {
+  public UsuarioNaoEncontradoException(String mensagem) {
     super(mensagem);
   }
 
-  public GrupoNaoEncontradoException(Long grupoId) {
-    this("Não existe um cadastro de grupo com código " + grupoId);
+  public UsuarioNaoEncontradoException(Long grupoId) {
+    this("Não existe um usuario de grupo com código " + grupoId);
   }
 }

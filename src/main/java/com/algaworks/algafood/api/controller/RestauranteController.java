@@ -1,9 +1,10 @@
 package com.algaworks.algafood.api.controller;
 
-import com.algaworks.algafood.api.RestauranteModel;
+import com.algaworks.algafood.api.model.RestauranteModel;
 import com.algaworks.algafood.api.dtos.disassembler.RestauranteInputDisassembler;
 import com.algaworks.algafood.api.dtos.assembler.RestauranteModelAssembler;
 import com.algaworks.algafood.api.model.input.RestauranteInput;
+import com.algaworks.algafood.domain.exception.CidadeNaoEncontradaException;
 import com.algaworks.algafood.domain.exception.CozinhaNaoEncontradaException;
 import com.algaworks.algafood.domain.exception.NegocioException;
 import com.algaworks.algafood.domain.model.Restaurante;
@@ -57,7 +58,7 @@ public class RestauranteController {
     try {
       Restaurante restaurante = restauranteInputDisassembler.toDomainObject(restauranteInput);
       return restauranteModelAssembler.toModel(cadastroRestaurante.salvar(restaurante));
-    } catch (CozinhaNaoEncontradaException e) {
+    } catch (CozinhaNaoEncontradaException | CidadeNaoEncontradaException e) {
       throw new NegocioException(e.getMessage());
     }
   }
@@ -74,7 +75,7 @@ public class RestauranteController {
 //            "id", "formasPagamento", "endereco", "dataCadastro", "produtos");
     try {
       return restauranteModelAssembler.toModel(cadastroRestaurante.salvar(restauranteAtual));
-    } catch (CozinhaNaoEncontradaException e) {
+    } catch (CozinhaNaoEncontradaException | CidadeNaoEncontradaException e) {
       throw new NegocioException(e.getMessage());
     }
   }
@@ -83,6 +84,18 @@ public class RestauranteController {
   public void remover(@PathVariable Long restauranteId) {
 
     cadastroRestaurante.excluir(restauranteId);
+  }
+
+  @PutMapping("/{restauranteId}/ativo")
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  public void ativar(@PathVariable Long restauranteId) {
+    cadastroRestaurante.ativar(restauranteId);
+  }
+
+  @DeleteMapping("/{restauranteId}/inativo")
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  public void inativar(@PathVariable Long restauranteId) {
+    cadastroRestaurante.inativar(restauranteId);
   }
 
 //  @PatchMapping("/{restauranteId}")

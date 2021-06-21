@@ -1,56 +1,70 @@
 package com.algaworks.algafood.domain.service;
 
-import com.algaworks.algafood.domain.exception.CidadeNaoEncontradaException;
 import com.algaworks.algafood.domain.exception.EntidadeEmUsoException;
-import com.algaworks.algafood.domain.exception.EntidadeNaoEncontradaException;
-import com.algaworks.algafood.domain.model.Cidade;
-import com.algaworks.algafood.domain.model.Estado;
-import com.algaworks.algafood.domain.repository.CidadeRepository;
+import com.algaworks.algafood.domain.exception.NegocioException;
+import com.algaworks.algafood.domain.exception.UsuarioNaoEncontradoException;
+import com.algaworks.algafood.domain.model.Usuario;
+import com.algaworks.algafood.domain.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Service
-public class CadastroCidadeService {
+public class CadastroUsuarioService {
 
-  private static final String MSG_CIDADE_EM_USO = "Cidade de código %d não pode ser removida, pois está em uso";
-
-  @Autowired
-  private CidadeRepository cidadeRepository;
+  private static final String MSG_USUARIO_EM_USO = "Usuario de código %d não pode ser removido, pois está em uso";
 
   @Autowired
-  private CadastroEstadoService cadastroEstado;
+  private UsuarioRepository usuarioRepository;
+
 
   @Transactional
-  public Cidade salvar(Cidade cidade) {
-    Long estadoId = cidade.getEstado().getId();
+  public Usuario salvar(Usuario usuario) {
 
-    Estado estado = cadastroEstado.buscarOuFalhar(estadoId);
+    usuarioRepository.detach(usuario);
 
-    cidade.setEstado(estado);
+    Optional<Usuario> usuarioExistente = usuarioRepository.findByEmail(usuario.getEmail());
 
-    return cidadeRepository.save(cidade);
+    if(usuarioExistente.isPresent() && !usuarioExistente.get().equals(usuario)) {
+      throw new NegocioException("Já existente um usuário cadastrado com o email " + usuario.getEmail());
+    }
+
+    return usuarioRepository.save(usuario);
   }
 
   @Transactional
-  public void excluir(Long cidadeId) {
+  public void alterarSenha(Long usuarioId, String senhaAtual, String senhaNova){
+
+    Usuario usuario = buscarOuFalhar(usuarioId);
+
+    if (usuario.senhaNaoCoincideCom(senhaAtual)) {
+      throw new NegocioException("Senha atual informada não coincide com a senha do usuário");
+    }
+
+    usuario.setSenha(senhaNova);
+  }
+
+  @Transactional
+  public void excluir(Long usuarioId) {
     try {
-      cidadeRepository.deleteById(cidadeId);
-      cidadeRepository.flush();
+      usuarioRepository.deleteById(usuarioId);
+      usuarioRepository.flush();
 
     } catch (EmptyResultDataAccessException e) {
-      throw new CidadeNaoEncontradaException(cidadeId);
+      throw new UsuarioNaoEncontradoException(usuarioId);
 
     } catch (DataIntegrityViolationException e) {
       throw new EntidadeEmUsoException(
-              String.format(MSG_CIDADE_EM_USO, cidadeId));
+              String.format(MSG_USUARIO_EM_USO, usuarioId));
     }
   }
 
-  public Cidade buscarOuFalhar(Long cidadeId) {
-    return cidadeRepository.findById(cidadeId)
-            .orElseThrow(() -> new CidadeNaoEncontradaException(cidadeId));
+  public Usuario buscarOuFalhar(Long usuarioId) {
+    return usuarioRepository.findById(usuarioId)
+            .orElseThrow(() -> new UsuarioNaoEncontradoException(usuarioId));
   }
 }

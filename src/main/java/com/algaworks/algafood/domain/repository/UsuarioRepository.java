@@ -1,7 +1,9 @@
 package com.algaworks.algafood.domain.repository;
 
-import com.algaworks.algafood.domain.model.Cidade;
-import org.springframework.data.jpa.repository.JpaRepository;
+import com.algaworks.algafood.domain.model.Usuario;
 
-public interface CidadeRepository extends JpaRepository<Cidade, Long> {
+import java.util.Optional;
+
+public interface UsuarioRepository extends CustomJpaRepository<Usuario, Long> {
+  Optional<Usuario> findByEmail(String email);
 }

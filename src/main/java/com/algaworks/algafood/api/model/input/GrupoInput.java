@@ -7,7 +7,7 @@ import javax.validation.constraints.NotBlank;
 
 @Getter
 @Setter
-public class EstadoInput {
+public class GrupoInput {
 
   @NotBlank
   private String nome;

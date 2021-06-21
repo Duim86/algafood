@@ -1,25 +1,23 @@
 package com.algaworks.algafood.api.dtos.disassembler;
 
-import com.algaworks.algafood.api.model.input.CozinhaInput;
-import com.algaworks.algafood.api.model.input.CozinhaInput;
-import com.algaworks.algafood.domain.model.Cozinha;
-import com.algaworks.algafood.domain.model.Cozinha;
+import com.algaworks.algafood.api.model.input.CidadeInput;
+import com.algaworks.algafood.domain.model.Cidade;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class CozinhaInputDisassembler {
+public class CidadeInputDisassembler {
 
   @Autowired
   private ModelMapper modelMapper;
 
-  public Cozinha toDomainObject(CozinhaInput cozinha) {
-    return modelMapper.map(cozinha, Cozinha.class);
+  public Cidade toDomainObject(CidadeInput cidade) {
+    return modelMapper.map(cidade, Cidade.class);
   }
 
-  public void copyToDomainObject(CozinhaInput cozinhaInput, Cozinha cozinha) {
+  public void copyToDomainObject(CidadeInput cidadeInput, Cidade cidade) {
 
-    modelMapper.map(cozinhaInput, cozinha);
+    modelMapper.map(cidadeInput, cidade);
   }
 }

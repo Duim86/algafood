@@ -1,7 +1,7 @@
 package com.algaworks.algafood.api.dtos.assembler;
 
-import com.algaworks.algafood.api.model.GrupoModel;
-import com.algaworks.algafood.domain.model.Grupo;
+import com.algaworks.algafood.api.model.UsuarioModel;
+import com.algaworks.algafood.domain.model.Usuario;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -11,19 +11,19 @@ import java.util.stream.Collectors;
 
 
 @Component
-public class GrupoModelAssembler {
+public class UsuarioModelAssembler {
 
   @Autowired
   private ModelMapper modelMapper;
 
 
 
-  public GrupoModel toModel(Grupo grupo) {
-    return modelMapper.map(grupo, GrupoModel.class);
+  public UsuarioModel toModel(Usuario usuario) {
+    return modelMapper.map(usuario, UsuarioModel.class);
   }
 
-  public List<GrupoModel> toCollectionModel(List<Grupo> grupos){
-    return grupos.stream()
+  public List<UsuarioModel> toCollectionModel(List<Usuario> usuarios){
+    return usuarios.stream()
             .map(this::toModel)
             .collect(Collectors.toList());
   }

@@ -7,8 +7,8 @@ import javax.validation.constraints.NotBlank;
 
 @Getter
 @Setter
-public class EstadoInput {
+public class FormaDePagamentoInput {
 
   @NotBlank
-  private String nome;
+  private String descricao;
 }

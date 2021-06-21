@@ -29,7 +29,7 @@ public class Produto {
   private BigDecimal preco;
 
   @JoinColumn(nullable = false)
-  private boolean Ativo;
+  private boolean ativo;
 
   @JoinColumn(nullable = false)
   @ManyToOne

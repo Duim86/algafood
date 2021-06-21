@@ -1,16 +1,14 @@
 package com.algaworks.algafood.api.controller;
 
-import com.algaworks.algafood.api.dtos.assembler.GrupoModelAssembler;
-import com.algaworks.algafood.api.dtos.disassembler.GrupoInputDisassembler;
-import com.algaworks.algafood.api.model.GrupoModel;
-import com.algaworks.algafood.api.model.input.GrupoInput;
-import com.algaworks.algafood.domain.exception.GrupoNaoEncontradoException;
-import com.algaworks.algafood.domain.exception.NegocioException;
-import com.algaworks.algafood.domain.model.Grupo;
-import com.algaworks.algafood.domain.model.Grupo;
-import com.algaworks.algafood.domain.repository.GrupoRepository;
-import com.algaworks.algafood.domain.service.CadastroGrupoService;
-import org.springframework.beans.BeanUtils;
+import com.algaworks.algafood.api.dtos.assembler.UsuarioModelAssembler;
+import com.algaworks.algafood.api.dtos.disassembler.UsuarioInputDisassembler;
+import com.algaworks.algafood.api.model.UsuarioModel;
+import com.algaworks.algafood.api.model.input.SenhaInput;
+import com.algaworks.algafood.api.model.input.UsuarioComSenhaInput;
+import com.algaworks.algafood.api.model.input.UsuarioInput;
+import com.algaworks.algafood.domain.model.Usuario;
+import com.algaworks.algafood.domain.repository.UsuarioRepository;
+import com.algaworks.algafood.domain.service.CadastroUsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -19,54 +17,61 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/grupos")
-public class GrupoController {
+@RequestMapping(value = "/usuarios")
+public class UsuarioController {
   @Autowired
-  private GrupoRepository grupoRepository;
+  private UsuarioRepository usuarioRepository;
 
   @Autowired
-  private CadastroGrupoService cadastroGrupo;
+  private CadastroUsuarioService cadastroUsuario;
 
   @Autowired
-  private GrupoModelAssembler grupoModelAssembler;
+  private UsuarioModelAssembler usuarioModelAssembler;
 
   @Autowired
-  private GrupoInputDisassembler grupoInputDisassembler;
+  private UsuarioInputDisassembler usuarioInputDisassembler;
 
   @ResponseStatus(HttpStatus.OK)
   @GetMapping
-  public List<Grupo> listar() {
-    return grupoRepository.findAll();
+  public List<UsuarioModel> listar() {
+    return usuarioModelAssembler.toCollectionModel(usuarioRepository.findAll());
   }
 
-  @GetMapping("/{grupoId}")
-  public Grupo buscar(@PathVariable Long grupoId) {
-    return cadastroGrupo.buscarOuFalhar(grupoId);
+  @GetMapping("/{usuarioId}")
+  public UsuarioModel buscar(@PathVariable Long usuarioId) {
+    return usuarioModelAssembler.toModel(cadastroUsuario.buscarOuFalhar(usuarioId));
   }
 
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
-  public GrupoModel adicionar(@RequestBody @Valid GrupoInput grupoInput) {
-      Grupo grupo = grupoInputDisassembler.toDomainObject(grupoInput);
-      return grupoModelAssembler.toModel(cadastroGrupo.salvar(grupo));
+  public UsuarioModel adicionar(@RequestBody @Valid UsuarioComSenhaInput usuarioInput) {
+      Usuario usuario = usuarioInputDisassembler.toDomainObject(usuarioInput);
+      return usuarioModelAssembler.toModel(cadastroUsuario.salvar(usuario));
   }
 
-  @PutMapping("/{grupoId}")
-  public GrupoModel atualizar(@PathVariable Long grupoId,
-                              @RequestBody @Valid GrupoInput grupoInput) {
-    Grupo grupoAtual = cadastroGrupo.buscarOuFalhar(grupoId);
+  @PutMapping("/{usuarioId}")
+  public UsuarioModel atualizar(@PathVariable Long usuarioId,
+                              @RequestBody @Valid UsuarioInput usuarioInput) {
+    Usuario usuarioAtual = cadastroUsuario.buscarOuFalhar(usuarioId);
 
-    grupoInputDisassembler.copyToDomainObject(grupoInput, grupoAtual);
+    usuarioInputDisassembler.copyToDomainObject(usuarioInput, usuarioAtual);
 
-    grupoAtual = cadastroGrupo.salvar(grupoAtual);
+    usuarioAtual = cadastroUsuario.salvar(usuarioAtual);
 
-    return grupoModelAssembler.toModel(grupoAtual);
+    return usuarioModelAssembler.toModel(usuarioAtual);
   }
 
-  @DeleteMapping("/{grupoId}")
+  @PutMapping("/{usuarioId}/senha")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  public void remover(@PathVariable Long grupoId) {
-    cadastroGrupo.excluir(grupoId);
+  public void alterarSenha(@PathVariable Long usuarioId, @RequestBody @Valid SenhaInput senha) {
+    cadastroUsuario.alterarSenha(usuarioId, senha.getSenhaAtual(), senha.getSenhaNova());
+  }
+
+
+  @DeleteMapping("/{usuarioId}")
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  public void remover(@PathVariable Long usuarioId) {
+    cadastroUsuario.excluir(usuarioId);
   }
 }
 
