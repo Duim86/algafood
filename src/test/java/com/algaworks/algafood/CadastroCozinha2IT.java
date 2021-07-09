@@ -13,7 +13,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import com.algaworks.algafood.util.DatabaseCleaner;
 
 import static com.jayway.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
@@ -27,9 +26,6 @@ public class CadastroCozinha2IT {
   private int port;
 
   @Autowired
-  private DatabaseCleaner databaseCleaner;
-
-  @Autowired
   private CozinhaRepository cozinhaRepository;
 
   @BeforeEach
@@ -38,7 +34,6 @@ public class CadastroCozinha2IT {
     RestAssured.port = port;
     RestAssured.basePath = "/cozinhas";
 
-    databaseCleaner.clearTables();
     prepararDados();
   }
 
@@ -60,8 +55,8 @@ public class CadastroCozinha2IT {
     .when()
       .get()
     .then()
-      .body("", Matchers.hasSize(2))
-      .body("nome", Matchers.hasItems("Indiana", "Tailandesa"));
+      .body("content.nome", Matchers.hasSize(2))
+      .body("content.nome", Matchers.hasItems("Indiana", "Tailandesa"));
   }
 
   @Test
@@ -89,7 +84,7 @@ public class CadastroCozinha2IT {
   }
 
   @Test
-  public void deveRetornarStatus404_QuandoConsultarCozinhaExistente() {
+  public void deveRetornarStatus404_QuandoConsultarCozinhaInexistente() {
     given()
             .pathParam("cozinhaId", 100)
             .accept(ContentType.JSON)

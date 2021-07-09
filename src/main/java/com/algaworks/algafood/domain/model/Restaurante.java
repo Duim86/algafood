@@ -1,6 +1,5 @@
 package com.algaworks.algafood.domain.model;
 
-import com.algaworks.algafood.core.validation.ValorZeroIncluiDescricao;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.CreationTimestamp;

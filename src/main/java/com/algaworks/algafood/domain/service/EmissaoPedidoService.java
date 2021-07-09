@@ -43,7 +43,7 @@ public class EmissaoPedidoService {
 
   private void validarItens(Pedido pedido) {
     pedido.getItens().forEach(item -> {
-      Produto produto = cadastroProduto.buscarOuFalhar(
+      var produto = cadastroProduto.buscarOuFalhar(
               pedido.getRestaurante().getId(), item.getProduto().getId());
 
       item.setPedido(pedido);
@@ -53,10 +53,10 @@ public class EmissaoPedidoService {
   }
 
   public void validarPedido(Pedido pedido) {
-    Usuario usuario = cadastroUsuario.buscarOuFalhar(1L);
-    Restaurante restaurante = cadastroRestaurante.buscarOuFalhar(pedido.getRestaurante().getId());
-    Cidade cidade = cadastroCidade.buscarOuFalhar(pedido.getEnderecoEntrega().getCidade().getId());
-    FormaDePagamento formaDePagamento = formaDePagamentoService.buscarOuFalhar(pedido.getFormaDePagamento().getId());
+    var usuario = cadastroUsuario.buscarOuFalhar(1L);
+    var restaurante = cadastroRestaurante.buscarOuFalhar(pedido.getRestaurante().getId());
+    var cidade = cadastroCidade.buscarOuFalhar(pedido.getEnderecoEntrega().getCidade().getId());
+    var formaDePagamento = formaDePagamentoService.buscarOuFalhar(pedido.getFormaDePagamento().getId());
 
     pedido.setCliente(usuario);
     pedido.getEnderecoEntrega().setCidade(cidade);

@@ -68,7 +68,10 @@ alter table item_pedido
 INSERT INTO cozinha (id, nome)
 VALUES (1, 'Tailandesa'),
        (2, 'Indiana'),
-       (3, 'Japonesa');
+       (3, 'Japonesa'),
+       (4, 'Argentina'),
+       (5, 'Brasileira');
+
 
 INSERT INTO estado (id, nome)
 VALUES (1, 'Paraná'),
@@ -98,6 +101,7 @@ INSERT INTO produto (ativo, descricao, nome, preco, restaurante_id)
 VALUES (true, 'Água 500ml Ouro Fino', 'Água', 2.75, 1),
        (true, 'Cerveja 355ml Heineken', 'Cerveja', 5.25, 1),
        (true, 'Suco de Laranja 1L', 'Suco', 10, 1),
+       (false, 'Leite Desnatado 1L', 'Leite', 4, 1),
        (true, 'CheeseBurguer', 'Lanche', 10, 2),
        (true, 'Batata Frita', 'Acompanhamento', 6, 2),
        (true, 'Pizza Calabresa', 'Pizza', 25, 3);
@@ -157,10 +161,26 @@ VALUES (1, 4),
 INSERT INTO pedido (id, codigo, restaurante_id, cliente_id, forma_de_pagamento_id, endereco_cidade_id, endereco_cep,
                     endereco_logradouro, endereco_numero, endereco_complemento, endereco_bairro,
                     status, data_criacao, subtotal, taxa_frete, valor_total)
-VALUES (2,'5b084069-ff49-4549-8a53-748ee33979ff', 3, 1, 2, 1, '38400-111', 'Rua Acre', '300', 'Casa 2', 'Centro',
-        'CRIADO', utc_timestamp, 79, 0, 79),
-       (1, 'b172992b-37a7-4a07-8e06-cf230bcb186a', 1, 1, 1, 1, '38400-000', 'Rua Floriano Peixoto', '500', 'Apto 801', 'Brasil',
-        'CRIADO', utc_timestamp, 298.90, 10, 308.90);
+VALUES (1, '5b084069-ff49-4549-8a53-748ee33979ff', 3, 1, 2, 1, '38400-111', 'Rua Acre', '300', 'Casa 2', 'Centro',
+        'CONFIRMADO', '2021-06-17 17:52:51', 79, 0, 79),
+       (2, 'b172992b-37a7-4a07-8e06-cf230bcb186a', 2, 2, 1, 1, '38400-000', 'Rua Floriano Peixoto', '500', 'Apto 801',
+        'Brasil',
+        'ENTREGUE', '2021-06-18 17:52:51', 125.5, 5, 130.50),
+       (3, '3b084069-ff49-4549-8a53-748ee33979ff', 3, 2, 2, 1, '38400-111', 'Rua Acre', '300', 'Casa 2', 'Centro',
+        'CONFIRMADO', '2021-06-21 17:52:51', 45, 12, 57),
+       (4, 'l172992b-37a7-4a07-8e06-cf230bcb186a', 1, 3, 1, 1, '38400-000', 'Rua Floriano Peixoto', '500', 'Apto 801',
+        'Brasil',
+        'ENTREGUE', '2021-06-20 17:52:51', 298.90, 10, 308.90),
+       (5, 'l372992b-37a7-4a07-8e06-cf230bcb186a', 3, 1, 1, 1, '38400-000', 'Rua Floriano Peixoto', '500', 'Apto 801',
+        'Brasil',
+        'CONFIRMADO', '2021-06-19 17:52:51', 95.25, 7, 102.25),
+       (6, 'l372992b-3ea7-4a07-8e06-cf230bcb186a', 1, 1, 1, 1, '38400-000', 'Rua Floriano Peixoto', '500', 'Apto 801',
+        'Brasil',
+        'ENTREGUE', '2021-06-19 17:52:51', 95.25, 7, 102.25),
+       (7, 'l372992b-37ac-4a07-8e06-cf230bcb186a', 2, 1, 1, 1, '38400-000', 'Rua Floriano Peixoto', '500', 'Apto 801',
+        'Brasil',
+        'ENTREGUE', '2021-06-19 01:52:51', 95.25, 7, 102.25);
+
 
 INSERT INTO item_pedido (id, pedido_id, produto_id, quantidade, preco_unitario, preco_total, observacao)
 VALUES (3, 2, 6, 1, 79, 79, 'Ao ponto'),

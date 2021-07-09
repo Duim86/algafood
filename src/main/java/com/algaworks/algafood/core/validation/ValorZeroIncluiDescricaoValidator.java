@@ -22,14 +22,20 @@ public class ValorZeroIncluiDescricaoValidator implements ConstraintValidator<Va
 
   @Override
   public boolean isValid(Object objetoValidacao, ConstraintValidatorContext context) {
-    boolean valido = true;
+    var valido = true;
+    String descricao = null;
+    BigDecimal valor = null;
 
     try {
-      BigDecimal valor = (BigDecimal) BeanUtils.getPropertyDescriptor(objetoValidacao.getClass(), valorField)
-              .getReadMethod().invoke(objetoValidacao);
+      var valorProperty = BeanUtils.getPropertyDescriptor(objetoValidacao.getClass(), valorField);
+      if(valorProperty != null) {
+        valor = (BigDecimal) valorProperty.getReadMethod().invoke(objetoValidacao);
+      }
 
-      String descricao = (String) BeanUtils.getPropertyDescriptor(objetoValidacao.getClass(), descricaoField)
-              .getReadMethod().invoke(objetoValidacao);
+      var descricaoProperty = BeanUtils.getPropertyDescriptor(objetoValidacao.getClass(), descricaoField);
+      if(descricaoProperty != null) {
+        descricao = (String) descricaoProperty.getReadMethod().invoke(objetoValidacao);
+      }
 
       if(valor != null && BigDecimal.ZERO.compareTo(valor) == 0 && descricao != null ) {
         valido = descricao.toLowerCase().contains(this.descricaoObrigatoria.toLowerCase());

@@ -3,8 +3,6 @@ package com.algaworks.algafood.domain.service;
 import com.algaworks.algafood.domain.exception.EntidadeEmUsoException;
 import com.algaworks.algafood.domain.exception.EstadoNaoEncontradoException;
 import com.algaworks.algafood.domain.exception.FormaDePagamentoNaoEncontradoException;
-import com.algaworks.algafood.domain.model.Cozinha;
-import com.algaworks.algafood.domain.model.FormaDePagamento;
 import com.algaworks.algafood.domain.model.FormaDePagamento;
 import com.algaworks.algafood.domain.repository.FormaDePagamentoRepository;
 import org.springframework.beans.factory.annotation.Autowired;

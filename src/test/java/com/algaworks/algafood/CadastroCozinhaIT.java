@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import javax.validation.ConstraintViolationException;
@@ -40,8 +41,8 @@ class CadastroCozinhaIT {
     Cozinha novaCozinha = new Cozinha();
     novaCozinha.setNome(null);
 
-    ConstraintViolationException erroEsperado =
-            Assertions.assertThrows(ConstraintViolationException.class, () -> {
+    DataIntegrityViolationException erroEsperado =
+            Assertions.assertThrows(DataIntegrityViolationException.class, () -> {
               cadastroCozinha.salvar(novaCozinha);
             });
 

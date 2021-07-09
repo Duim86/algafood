@@ -1,4 +1,4 @@
-package com.algaworks.algafood.core.modelMapper;
+package com.algaworks.algafood.core.modelmapper;
 
 import com.algaworks.algafood.api.model.EnderecoModel;
 import com.algaworks.algafood.api.model.input.ItemPedidoInput;
@@ -7,10 +7,9 @@ import com.algaworks.algafood.domain.model.ItemPedido;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.ui.Model;
 
 @Configuration
-public class modelMapperConfig {
+public class ModelMapperConfig {
 
   @Bean
   public ModelMapper modelMapper() {

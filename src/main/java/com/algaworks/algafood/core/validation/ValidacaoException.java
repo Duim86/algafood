@@ -6,9 +6,9 @@ import org.springframework.validation.BindingResult;
 
 @AllArgsConstructor
 @Getter
-public class ValidacaoException extends RuntimeException{
+public class ValidacaoException extends RuntimeException {
 
-  private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 2405172041950251807L;
 
-  private final BindingResult bindingResult;
+  private final transient BindingResult bindingResult;
 }

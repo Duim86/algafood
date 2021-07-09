@@ -39,8 +39,8 @@ public class ItemPedido {
   private Produto produto;
 
   public void calcularPrecoTotal() {
-    BigDecimal precoUnitario = this.getPrecoUnitario();
-    Integer quantidade = this.getQuantidade();
+    precoUnitario = this.getPrecoUnitario();
+    quantidade = this.getQuantidade();
 
     setPrecoTotal(precoUnitario.multiply(new BigDecimal(quantidade)));
   }

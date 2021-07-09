@@ -12,7 +12,6 @@ import com.algaworks.algafood.domain.exception.RestauranteNaoEncontradoException
 import com.algaworks.algafood.domain.model.Restaurante;
 import com.algaworks.algafood.domain.repository.RestauranteRepository;
 import com.algaworks.algafood.domain.service.CadastroRestauranteService;
-import com.fasterxml.jackson.annotation.JsonView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.json.MappingJacksonValue;
@@ -56,6 +55,7 @@ public class RestauranteController {
     return restauranteWrapper;
   }
 
+//
 //  @GetMapping
 //  public List<RestauranteModel> listar() {
 //    return restauranteModelAssembler.toCollectionModel(restauranteRepository.findAll());
@@ -77,7 +77,7 @@ public class RestauranteController {
   @GetMapping("/{restauranteId}")
   public RestauranteModel buscar(@PathVariable Long restauranteId) {
 
-    Restaurante restaurante = cadastroRestaurante.buscarOuFalhar(restauranteId);
+    var restaurante = cadastroRestaurante.buscarOuFalhar(restauranteId);
 
     return restauranteModelAssembler.toModel(restaurante);
   }
@@ -87,7 +87,7 @@ public class RestauranteController {
   public RestauranteModel adicionar(@RequestBody
                                     @Valid RestauranteInput restauranteInput) {
     try {
-      Restaurante restaurante = restauranteInputDisassembler.toDomainObject(restauranteInput);
+      var restaurante = restauranteInputDisassembler.toDomainObject(restauranteInput);
       return restauranteModelAssembler.toModel(cadastroRestaurante.salvar(restaurante));
     } catch (CozinhaNaoEncontradaException | CidadeNaoEncontradaException e) {
       throw new NegocioException(e.getMessage());
@@ -98,7 +98,7 @@ public class RestauranteController {
   public RestauranteModel atualizar(@PathVariable Long restauranteId,
                                     @RequestBody @Valid RestauranteInput restauranteInput) {
 //    Restaurante restaurante = restauranteInputDisassembler.toDomainObject(restauranteInput);
-    Restaurante restauranteAtual = cadastroRestaurante.buscarOuFalhar(restauranteId);
+    var restauranteAtual = cadastroRestaurante.buscarOuFalhar(restauranteId);
 
     restauranteInputDisassembler.copyToDomainObject(restauranteInput, restauranteAtual);
 

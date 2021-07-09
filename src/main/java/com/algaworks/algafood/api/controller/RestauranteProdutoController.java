@@ -4,8 +4,6 @@ import com.algaworks.algafood.api.dtos.assembler.ProdutoModelAssembler;
 import com.algaworks.algafood.api.dtos.disassembler.ProdutoInputDisassembler;
 import com.algaworks.algafood.api.model.ProdutoModel;
 import com.algaworks.algafood.api.model.input.ProdutoInput;
-import com.algaworks.algafood.domain.model.Produto;
-import com.algaworks.algafood.domain.model.Restaurante;
 import com.algaworks.algafood.domain.repository.ProdutoRepository;
 import com.algaworks.algafood.domain.service.CadastroProdutoService;
 import com.algaworks.algafood.domain.service.CadastroRestauranteService;
@@ -19,42 +17,50 @@ import java.util.List;
 @RequestMapping("/restaurantes/{restauranteId}/produtos")
 public class RestauranteProdutoController {
 
-  @Autowired
-  private ProdutoRepository produtoRepository;
+
+  private final ProdutoRepository produtoRepository;
+  private final CadastroRestauranteService cadastroRestaurante;
+  private final CadastroProdutoService cadastroProduto;
+  private final ProdutoModelAssembler produtoModelAssembler;
+  private final ProdutoInputDisassembler produtoInputDisassembler;
 
   @Autowired
-  private CadastroRestauranteService cadastroRestaurante;
-
-  @Autowired
-  private CadastroProdutoService cadastroProduto;
-
-  @Autowired
-  private ProdutoModelAssembler produtoModelAssembler;
-
-  @Autowired
-  private ProdutoInputDisassembler produtoInputDisassembler;
+  public RestauranteProdutoController(ProdutoRepository produtoRepository,
+                                      CadastroRestauranteService cadastroRestaurante,
+                                      CadastroProdutoService cadastroProduto,
+                                      ProdutoModelAssembler produtoModelAssembler,
+                                      ProdutoInputDisassembler produtoInputDisassembler) {
+    this.produtoRepository = produtoRepository;
+    this.cadastroRestaurante = cadastroRestaurante;
+    this.cadastroProduto = cadastroProduto;
+    this.produtoModelAssembler = produtoModelAssembler;
+    this.produtoInputDisassembler = produtoInputDisassembler;
+  }
 
   @GetMapping
-  public List<ProdutoModel> listar(@PathVariable Long restauranteId) {
+  public List<ProdutoModel> listar(@PathVariable Long restauranteId,
+                                   @RequestParam(required = false) boolean incluirInativos) {
+    var restaurante = cadastroRestaurante.buscarOuFalhar(restauranteId);
 
-    Restaurante restaurante = cadastroRestaurante.buscarOuFalhar(restauranteId);
-
-    return produtoModelAssembler.toCollectionModel(produtoRepository.findAllByRestaurante(restaurante));
-
+    if(incluirInativos) {
+     return produtoModelAssembler.toCollectionModel(produtoRepository.findAllByRestaurante(restaurante));
+    } else {
+     return  produtoModelAssembler.toCollectionModel(produtoRepository.findAllByRestauranteAndAtivoTrue(restaurante));
+    }
   }
 
   @GetMapping("/{produtoId}")
   public ProdutoModel buscar(@PathVariable Long restauranteId, @PathVariable Long produtoId) {
 
-    Produto produto = cadastroProduto.buscarOuFalhar(restauranteId, produtoId);
+    var produto = cadastroProduto.buscarOuFalhar(restauranteId, produtoId);
     return produtoModelAssembler.toModel(produto);
   }
 
   @PostMapping
   public ProdutoModel adicionar(@PathVariable Long restauranteId, @RequestBody @Valid ProdutoInput produtoInput) {
-    Restaurante restaurante = cadastroRestaurante.buscarOuFalhar(restauranteId);
+    var restaurante = cadastroRestaurante.buscarOuFalhar(restauranteId);
 
-    Produto produto = produtoInputDisassembler.toDomainObject(produtoInput);
+    var produto = produtoInputDisassembler.toDomainObject(produtoInput);
     produto.setRestaurante(restaurante);
 
     return produtoModelAssembler.toModel(cadastroProduto.salvar(produto));
@@ -63,7 +69,7 @@ public class RestauranteProdutoController {
   @PutMapping("/{produtoId}")
   public ProdutoModel atualizar(@PathVariable Long restauranteId, @PathVariable Long produtoId,
                                 @RequestBody @Valid ProdutoInput produtoInput) {
-    Produto produtoAtual = cadastroProduto.buscarOuFalhar(restauranteId, produtoId);
+    var produtoAtual = cadastroProduto.buscarOuFalhar(restauranteId, produtoId);
 
     produtoInputDisassembler.copyToDomainObject(produtoInput, produtoAtual);
 

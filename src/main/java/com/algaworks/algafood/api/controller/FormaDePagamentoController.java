@@ -1,8 +1,8 @@
 package com.algaworks.algafood.api.controller;
 
-import com.algaworks.algafood.api.model.FormaDePagamentoModel;
 import com.algaworks.algafood.api.dtos.assembler.FormaDePagamentoModelAssembler;
 import com.algaworks.algafood.api.dtos.disassembler.FormaDePagamentoInputDisassembler;
+import com.algaworks.algafood.api.model.FormaDePagamentoModel;
 import com.algaworks.algafood.api.model.input.FormaDePagamentoInput;
 import com.algaworks.algafood.domain.model.FormaDePagamento;
 import com.algaworks.algafood.domain.repository.FormaDePagamentoRepository;

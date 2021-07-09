@@ -16,7 +16,6 @@ public class RestauranteModel {
 
   @JsonView({RestauranteView.Resumo.class, RestauranteView.ApenasNome.class})
   private String nome;
-  // private BigDecimal precoFrete;
 
   @JsonView(RestauranteView.Resumo.class)
   private BigDecimal taxaFrete;
