@@ -1,30 +1,21 @@
 package com.algaworks.algafood.api.dtos.assembler;
 
-import com.algaworks.algafood.api.model.CidadeModel;
-import com.algaworks.algafood.domain.model.Cidade;
+import com.algaworks.algafood.api.model.FotoProdutoModel;
+import com.algaworks.algafood.domain.model.FotoProduto;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 
 @Component
-public class CidadeModelAssembler {
+public class FotoProdutoModelAssembler {
 
   @Autowired
   private ModelMapper modelMapper;
 
 
-
-  public CidadeModel toModel(Cidade cidade) {
-    return modelMapper.map(cidade, CidadeModel.class);
+  public FotoProdutoModel toModel(FotoProduto foto) {
+    return modelMapper.map(foto, FotoProdutoModel.class);
   }
 
-  public List<CidadeModel> toCollectionModel(List<Cidade> cidades){
-    return cidades.stream()
-            .map(this::toModel)
-            .collect(Collectors.toList());
-  }
 }

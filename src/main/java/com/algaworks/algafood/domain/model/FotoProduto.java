@@ -1,22 +1,26 @@
 package com.algaworks.algafood.domain.model;
 
+import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
 
 import javax.persistence.*;
 
-@Getter
-@Setter
+@Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
-public class Estado {
+public class FotoProduto {
 
   @EqualsAndHashCode.Include
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "produto_id")
   private Long id;
 
-  @Column(nullable = false)
-  private String nome;
+  @OneToOne(fetch = FetchType.LAZY)
+  @MapsId
+  private Produto produto;
+
+  private String nomeArquivo;
+  private String descricao;
+  private String contentType;
+  private Long tamanho;
 }

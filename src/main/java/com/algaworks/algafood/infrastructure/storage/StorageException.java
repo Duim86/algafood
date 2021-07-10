@@ -1,2 +1,13 @@
-package com.algaworks.algafood.infrastructure.storage;public class StorageException {
+package com.algaworks.algafood.infrastructure.storage;
+
+public class StorageException extends RuntimeException{
+  public static final long serialVersionUID = 1L;
+
+  public StorageException(String message) {
+    super(message);
+  }
+
+  public StorageException(String message, Throwable cause) {
+    super(message, cause);
+  }
 }

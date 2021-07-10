@@ -1,5 +1,6 @@
 package com.algaworks.algafood.api.model;
 
+import com.algaworks.algafood.domain.model.Estado;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -8,6 +9,6 @@ import lombok.Setter;
 public class CidadeModel {
   private Long id;
   private String nome;
-  private EstadoModel estadoNome;
+  private Estado estado;
 
 }

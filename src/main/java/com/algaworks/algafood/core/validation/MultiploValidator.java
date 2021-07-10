@@ -15,7 +15,7 @@ public class MultiploValidator implements ConstraintValidator<Multiplo, Number> 
 
   @Override
   public boolean isValid(Number value, ConstraintValidatorContext context) {
-    boolean valido = true;
+    var valido = true;
 
     if(value != null) {
       var valorDecimal = BigDecimal.valueOf(value.doubleValue());

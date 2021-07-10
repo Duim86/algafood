@@ -13,16 +13,15 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 @Target({ METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER, TYPE_USE })
 @Retention(RUNTIME)
-@Constraint(validatedBy = {MultiploValidator.class})
-public @interface Multiplo {
+@Constraint(validatedBy = {FileSizeValidator.class})
+public @interface FileSize {
 
-  @OverridesAttribute(constraint = PositiveOrZero.class, name = "message")
-  String message() default "múltiplo inválido";
+  String message() default "tamanho do arquivo inválido";
 
   Class<?>[] groups() default { };
 
   Class<? extends Payload>[] payload() default { };
 
-  int numero();
+  String max();
 
 }
