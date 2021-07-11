@@ -1,0 +1,8 @@
+{
+  "properties": [
+    {
+      "name": "algafood.storage.local.diretorio-fotos",
+      "type": "java.lang.String",
+      "description": "Description for algafood.storage.local.diretorio-fotos."
+  }
+] }

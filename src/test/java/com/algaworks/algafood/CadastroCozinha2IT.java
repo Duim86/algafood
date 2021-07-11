@@ -20,7 +20,7 @@ import static org.hamcrest.Matchers.equalTo;
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource("/application-test.properties")
-public class CadastroCozinha2IT {
+class CadastroCozinha2IT {
 
   @LocalServerPort
   private int port;
@@ -38,41 +38,41 @@ public class CadastroCozinha2IT {
   }
 
   @Test
-  public void deveRetornarStatus200_QuandoConsultarCozinhas() {
-         given()
+  void deveRetornarStatus200_QuandoConsultarCozinhas() {
+    given()
             .accept(ContentType.JSON)
-        .when()
+            .when()
             .get()
-        .then()
+            .then()
             .statusCode(200);
 
   }
 
   @Test
-  public void deveConter2Cozinhas_QuandoConsultarCozinhas() {
+  void deveConter2Cozinhas_QuandoConsultarCozinhas() {
     given()
-      .accept(ContentType.JSON)
-    .when()
-      .get()
-    .then()
-      .body("content.nome", Matchers.hasSize(2))
-      .body("content.nome", Matchers.hasItems("Indiana", "Tailandesa"));
+            .accept(ContentType.JSON)
+            .when()
+            .get()
+            .then()
+            .body("content.nome", Matchers.hasSize(2))
+            .body("content.nome", Matchers.hasItems("Indiana", "Tailandesa"));
   }
 
   @Test
-  public void deveRetornarStatus201_QuandoCadastrarCozinha() {
+  void deveRetornarStatus201_QuandoCadastrarCozinha() {
     given()
             .body("{\"nome\": \"Chinesa\"}")
             .contentType(ContentType.JSON)
             .accept(ContentType.JSON)
-    .when()
+            .when()
             .post()
-    .then()
+            .then()
             .statusCode(201);
   }
 
   @Test
-  public void deveRetornarRespostaEStatusCorretos_QuandoConsultarCozinhaExistente() {
+  void deveRetornarRespostaEStatusCorretos_QuandoConsultarCozinhaExistente() {
     given()
             .pathParam("cozinhaId", 2)
             .accept(ContentType.JSON)
@@ -84,7 +84,7 @@ public class CadastroCozinha2IT {
   }
 
   @Test
-  public void deveRetornarStatus404_QuandoConsultarCozinhaInexistente() {
+  void deveRetornarStatus404_QuandoConsultarCozinhaInexistente() {
     given()
             .pathParam("cozinhaId", 100)
             .accept(ContentType.JSON)

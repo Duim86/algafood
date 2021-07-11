@@ -3,7 +3,6 @@ package com.algaworks.algafood.domain.service;
 import com.algaworks.algafood.domain.exception.CidadeNaoEncontradaException;
 import com.algaworks.algafood.domain.exception.EntidadeEmUsoException;
 import com.algaworks.algafood.domain.model.Cidade;
-import com.algaworks.algafood.domain.model.Estado;
 import com.algaworks.algafood.domain.repository.CidadeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -26,7 +25,7 @@ public class CadastroCidadeService {
   public Cidade salvar(Cidade cidade) {
     Long estadoId = cidade.getEstado().getId();
 
-    Estado estado = cadastroEstado.buscarOuFalhar(estadoId);
+    var estado = cadastroEstado.buscarOuFalhar(estadoId);
 
     cidade.setEstado(estado);
 

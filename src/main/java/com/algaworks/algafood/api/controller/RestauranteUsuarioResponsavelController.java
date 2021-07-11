@@ -2,7 +2,6 @@ package com.algaworks.algafood.api.controller;
 
 import com.algaworks.algafood.api.dtos.assembler.UsuarioModelAssembler;
 import com.algaworks.algafood.api.model.UsuarioModel;
-import com.algaworks.algafood.domain.model.Restaurante;
 import com.algaworks.algafood.domain.service.CadastroRestauranteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,7 +21,7 @@ public class RestauranteUsuarioResponsavelController {
 
   @GetMapping
   public List<UsuarioModel> listar(@PathVariable Long restauranteId) {
-    Restaurante restaurante = cadastroRestaurante.buscarOuFalhar(restauranteId);
+    var restaurante = cadastroRestaurante.buscarOuFalhar(restauranteId);
 
     return usuarioModelAssembler.toCollectionModel(restaurante.getResponsaveis());
   }

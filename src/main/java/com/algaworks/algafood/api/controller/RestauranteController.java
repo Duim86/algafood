@@ -45,7 +45,7 @@ public class RestauranteController {
     List<Restaurante> restaurantes = restauranteRepository.findAll();
     List<RestauranteModel> restauranteModel = restauranteModelAssembler.toCollectionModel(restaurantes);
 
-    MappingJacksonValue restauranteWrapper = new MappingJacksonValue(restauranteModel);
+    var restauranteWrapper = new MappingJacksonValue(restauranteModel);
 
     restauranteWrapper.setSerializationView(RestauranteView.Resumo.class);
 

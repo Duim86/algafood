@@ -7,8 +7,6 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
-import javax.mail.internet.MimeMessage;
-
 @Service
 public class SmtpEnvioEmailService implements EnvioEmailService {
 
@@ -21,9 +19,9 @@ public class SmtpEnvioEmailService implements EnvioEmailService {
   @Override
   public void enviar(Mensagem mensagem) {
     try {
-      MimeMessage mimeMessage = mailSender.createMimeMessage();
+      var mimeMessage = mailSender.createMimeMessage();
 
-      MimeMessageHelper helper = new MimeMessageHelper(mimeMessage);
+      var helper = new MimeMessageHelper(mimeMessage);
 
       helper.setFrom(emailProperties.getRemetente());
       helper.setTo(mensagem.getDestinatarios().toArray(new String[0]));

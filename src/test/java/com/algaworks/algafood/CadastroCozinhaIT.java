@@ -24,7 +24,7 @@ class CadastroCozinhaIT {
   private CadastroCozinhaService cadastroCozinha;
 
   @Test
-  public void testarCadastroCozinhaComSucesso() { //HappyPath
+  void testarCadastroCozinhaComSucesso() { //HappyPath
     //cenário
     Cozinha novaCozinha = new Cozinha();
     novaCozinha.setNome("Chinesa");
@@ -37,7 +37,7 @@ class CadastroCozinhaIT {
   }
 
   @Test
-  public void testarCozinhaSemNome() {
+  void testarCozinhaSemNome() {
     Cozinha novaCozinha = new Cozinha();
     novaCozinha.setNome(null);
 
@@ -50,7 +50,7 @@ class CadastroCozinhaIT {
   }
 
   @Test
-  public void deveFalhar_QuandoExcluirCozinhaEmUso() {
+  void deveFalhar_QuandoExcluirCozinhaEmUso() {
     EntidadeEmUsoException erroEsperado =
             Assertions.assertThrows(EntidadeEmUsoException.class, () -> {
               cadastroCozinha.excluir(1L);
@@ -60,7 +60,7 @@ class CadastroCozinhaIT {
   }
 
   @Test
-  public void deveFalhar_QuandoExcluirCozinhaInexistente() {
+  void deveFalhar_QuandoExcluirCozinhaInexistente() {
     CozinhaNaoEncontradaException erroEsperado =
             Assertions.assertThrows(CozinhaNaoEncontradaException.class, () -> {
               cadastroCozinha.excluir(100L);

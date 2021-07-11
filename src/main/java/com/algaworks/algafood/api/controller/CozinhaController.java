@@ -52,7 +52,7 @@ public class CozinhaController {
   @ResponseStatus(HttpStatus.CREATED)
   public CozinhaModel adicionar(@RequestBody @Valid CozinhaInput cozinhaInput) {
 
-    Cozinha restaurante = cozinhaInputDisassembler.toDomainObject(cozinhaInput);
+    var restaurante = cozinhaInputDisassembler.toDomainObject(cozinhaInput);
     return cozinhaModelAssembler.toModel(cadastroCozinha.salvar(restaurante));
   }
 
@@ -60,7 +60,7 @@ public class CozinhaController {
   public CozinhaModel atualizar(@RequestBody @Valid CozinhaInput cozinhaInput,
                            @PathVariable Long cozinhaId) {
 
-    Cozinha cozinhaAtual = cadastroCozinha.buscarOuFalhar(cozinhaId);
+    var cozinhaAtual = cadastroCozinha.buscarOuFalhar(cozinhaId);
     cozinhaInputDisassembler.copyToDomainObject(cozinhaInput, cozinhaAtual);
 
     // BeanUtils.copyProperties(cozinha, cozinhaAtual, "id");

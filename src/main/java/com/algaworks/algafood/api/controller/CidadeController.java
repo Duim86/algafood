@@ -46,7 +46,7 @@ public class CidadeController {
   @ResponseStatus(HttpStatus.CREATED)
   public CidadeModel adicionar(@RequestBody @Valid CidadeInput cidadeInput) {
     try {
-      Cidade cidade = cidadeInputDisassembler.toDomainObject(cidadeInput);
+      var cidade = cidadeInputDisassembler.toDomainObject(cidadeInput);
       return cidadeModelAssembler.toModel(cadastroCidade.salvar(cidade));
     } catch (EstadoNaoEncontradoException e) {
       throw new NegocioException(e.getMessage());
@@ -58,7 +58,7 @@ public class CidadeController {
   public Cidade atualizar(@RequestBody @Valid CidadeInput cidadeInput,
                           @PathVariable Long cidadeId) {
 
-    Cidade cidadeAtual = cadastroCidade.buscarOuFalhar(cidadeId);
+    var cidadeAtual = cadastroCidade.buscarOuFalhar(cidadeId);
 
    cidadeInputDisassembler.copyToDomainObject(cidadeInput, cidadeAtual);
 

@@ -2,7 +2,6 @@ package com.algaworks.algafood.api.controller;
 
 import com.algaworks.algafood.api.dtos.assembler.GrupoModelAssembler;
 import com.algaworks.algafood.api.model.GrupoModel;
-import com.algaworks.algafood.domain.model.Usuario;
 import com.algaworks.algafood.domain.service.CadastroUsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,7 +21,7 @@ public class UsuarioGrupoController {
 
   @GetMapping
   public List<GrupoModel> listar(@PathVariable Long usuarioId) {
-    Usuario usuario = cadastroUsuario.buscarOuFalhar(usuarioId);
+    var usuario = cadastroUsuario.buscarOuFalhar(usuarioId);
 
     return grupoModelAssembler.toCollectionModel(usuario.getGrupos());
   }

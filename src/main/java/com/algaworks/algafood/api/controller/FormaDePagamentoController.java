@@ -4,7 +4,6 @@ import com.algaworks.algafood.api.dtos.assembler.FormaDePagamentoModelAssembler;
 import com.algaworks.algafood.api.dtos.disassembler.FormaDePagamentoInputDisassembler;
 import com.algaworks.algafood.api.model.FormaDePagamentoModel;
 import com.algaworks.algafood.api.model.input.FormaDePagamentoInput;
-import com.algaworks.algafood.domain.model.FormaDePagamento;
 import com.algaworks.algafood.domain.repository.FormaDePagamentoRepository;
 import com.algaworks.algafood.domain.service.CadastroFormaDePagamentoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,7 +52,7 @@ public class FormaDePagamentoController {
   public FormaDePagamentoModel atualizar(@RequestBody @Valid FormaDePagamentoInput formaDePagamentoInput,
                                @PathVariable Long formaDePagamentoId) {
 
-    FormaDePagamento formaDePagamentoAtual = cadastroFormaDePagamento.buscarOuFalhar(formaDePagamentoId);
+    var formaDePagamentoAtual = cadastroFormaDePagamento.buscarOuFalhar(formaDePagamentoId);
     formaDePagamentoInputDisassembler.copyToDomainObject(formaDePagamentoInput, formaDePagamentoAtual);
     return formaDePagamentoModelAssembler.toModel(cadastroFormaDePagamento.salvar(formaDePagamentoAtual));
   }

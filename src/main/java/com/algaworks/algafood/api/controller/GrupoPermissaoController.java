@@ -2,7 +2,6 @@ package com.algaworks.algafood.api.controller;
 
 import com.algaworks.algafood.api.dtos.assembler.PermissaoModelAssembler;
 import com.algaworks.algafood.api.model.PermissaoModel;
-import com.algaworks.algafood.domain.model.Grupo;
 import com.algaworks.algafood.domain.service.CadastroGrupoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,7 +21,7 @@ public class GrupoPermissaoController {
 
   @GetMapping
   public List<PermissaoModel> listar(@PathVariable Long grupoId) {
-    Grupo grupo = cadastroGrupo.buscarOuFalhar(grupoId);
+    var grupo = cadastroGrupo.buscarOuFalhar(grupoId);
 
     return permissaoModelAssembler.toCollectionModel(grupo.getPermissoes());
   }

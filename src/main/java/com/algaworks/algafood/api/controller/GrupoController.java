@@ -4,7 +4,6 @@ import com.algaworks.algafood.api.dtos.assembler.GrupoModelAssembler;
 import com.algaworks.algafood.api.dtos.disassembler.GrupoInputDisassembler;
 import com.algaworks.algafood.api.model.GrupoModel;
 import com.algaworks.algafood.api.model.input.GrupoInput;
-import com.algaworks.algafood.domain.model.Grupo;
 import com.algaworks.algafood.domain.repository.GrupoRepository;
 import com.algaworks.algafood.domain.service.CadastroGrupoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,14 +42,14 @@ public class GrupoController {
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
   public GrupoModel adicionar(@RequestBody @Valid GrupoInput grupoInput) {
-      Grupo grupo = grupoInputDisassembler.toDomainObject(grupoInput);
+      var grupo = grupoInputDisassembler.toDomainObject(grupoInput);
       return grupoModelAssembler.toModel(cadastroGrupo.salvar(grupo));
   }
 
   @PutMapping("/{grupoId}")
   public GrupoModel atualizar(@PathVariable Long grupoId,
                               @RequestBody @Valid GrupoInput grupoInput) {
-    Grupo grupoAtual = cadastroGrupo.buscarOuFalhar(grupoId);
+    var grupoAtual = cadastroGrupo.buscarOuFalhar(grupoId);
 
     grupoInputDisassembler.copyToDomainObject(grupoInput, grupoAtual);
 
