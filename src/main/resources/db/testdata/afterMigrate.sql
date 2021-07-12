@@ -164,10 +164,10 @@ INSERT INTO pedido (id, codigo, restaurante_id, cliente_id, forma_de_pagamento_i
                     endereco_logradouro, endereco_numero, endereco_complemento, endereco_bairro,
                     status, data_criacao, subtotal, taxa_frete, valor_total)
 VALUES (1, '5b084069-ff49-4549-8a53-748ee33979ff', 3, 1, 2, 1, '38400-111', 'Rua Acre', '300', 'Casa 2', 'Centro',
-        'CONFIRMADO', '2021-06-17 17:52:51', 79, 0, 79),
+        'CRIADO', '2021-06-17 17:52:51', 79, 0, 79),
        (2, 'b172992b-37a7-4a07-8e06-cf230bcb186a', 2, 2, 1, 1, '38400-000', 'Rua Floriano Peixoto', '500', 'Apto 801',
         'Brasil',
-        'ENTREGUE', '2021-06-18 17:52:51', 125.5, 5, 130.50),
+        'CRIADO', '2021-06-18 17:52:51', 125.5, 5, 130.50),
        (3, '3b084069-ff49-4549-8a53-748ee33979ff', 3, 2, 2, 1, '38400-111', 'Rua Acre', '300', 'Casa 2', 'Centro',
         'CONFIRMADO', '2021-06-21 17:52:51', 45, 12, 57),
        (4, 'l172992b-37a7-4a07-8e06-cf230bcb186a', 1, 3, 1, 1, '38400-000', 'Rua Floriano Peixoto', '500', 'Apto 801',

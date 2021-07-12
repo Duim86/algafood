@@ -1,31 +1,28 @@
 package com.algaworks.algafood.domain.service;
 
+import com.algaworks.algafood.domain.repository.PedidoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.algaworks.algafood.domain.service.EnvioEmailService.Mensagem;
-
 @Service
 public class FluxoPedidoService {
 
-  @Autowired
-  private EmissaoPedidoService emissaoPedido;
+  private final EmissaoPedidoService emissaoPedido;
+  private final PedidoRepository pedidoRepository;
 
   @Autowired
-  private EnvioEmailService envioEmail;
+  public FluxoPedidoService(EmissaoPedidoService emissaoPedido, PedidoRepository pedidoRepository) {
+    this.emissaoPedido = emissaoPedido;
+    this.pedidoRepository = pedidoRepository;
+  }
+
 
   @Transactional
   public void confirmar(String codigoPedido) {
     var pedido = emissaoPedido.buscarOuFalhar(codigoPedido);
     pedido.confirmar();
-
-    var mensagem = Mensagem.builder()
-            .assunto(pedido.getRestaurante().getNome() + " - Pedido confirmado!")
-            .corpo("pedido-confirmado.html")
-            .destinatario(pedido.getCliente().getEmail())
-            .build();
-    envioEmail.enviar(mensagem);
+    pedidoRepository.save(pedido);
   }
 
   @Transactional
@@ -38,5 +35,6 @@ public class FluxoPedidoService {
   public void cancelar(String codigoPedido) {
     var pedido = emissaoPedido.buscarOuFalhar(codigoPedido);
     pedido.cancelar();
+    pedidoRepository.save(pedido);
   }
 }
