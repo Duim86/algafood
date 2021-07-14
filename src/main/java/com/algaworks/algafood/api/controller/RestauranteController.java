@@ -15,7 +15,6 @@ import com.algaworks.algafood.domain.service.CadastroRestauranteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.json.MappingJacksonValue;
-import org.springframework.validation.SmartValidator;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -31,8 +30,8 @@ public class RestauranteController {
   @Autowired
   private CadastroRestauranteService cadastroRestaurante;
 
-  @Autowired
-  private SmartValidator validator;
+//  @Autowired
+//  private SmartValidator validator;
 
   @Autowired
   private RestauranteModelAssembler restauranteModelAssembler;
