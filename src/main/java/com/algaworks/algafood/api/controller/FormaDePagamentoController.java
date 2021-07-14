@@ -35,7 +35,7 @@ public class FormaDePagamentoController {
   @GetMapping
   public ResponseEntity<List<FormaDePagamentoModel>> listar(){
 
-    List<FormaDePagamentoModel> formasDePagamentoModel = formaDePagamentoModelAssembler.toCollectionModel(formaDePagamentoRepository.findAll());
+    var formasDePagamentoModel = formaDePagamentoModelAssembler.toCollectionModel(formaDePagamentoRepository.findAll());
 
     return ResponseEntity.ok()
             .cacheControl(CacheControl.maxAge(10, TimeUnit.SECONDS))
@@ -44,9 +44,14 @@ public class FormaDePagamentoController {
 
   @GetMapping("/{formaDePagamentoId}")
   public ResponseEntity<FormaDePagamentoModel> buscar(@PathVariable Long formaDePagamentoId){
-    FormaDePagamentoModel formasDePagamentoModel = formaDePagamentoModelAssembler.toModel(cadastroFormaDePagamento.buscarOuFalhar(formaDePagamentoId));
+    var formasDePagamentoModel = formaDePagamentoModelAssembler.toModel(cadastroFormaDePagamento.buscarOuFalhar(formaDePagamentoId));
+//
     return ResponseEntity.ok()
-            .cacheControl(CacheControl.maxAge(10, TimeUnit.SECONDS))
+//            .cacheControl(CacheControl.maxAge(10, TimeUnit.SECONDS))
+//            .cacheControl(CacheControl.maxAge(10, TimeUnit.SECONDS).cachePrivate())
+            .cacheControl(CacheControl.maxAge(10, TimeUnit.SECONDS).cachePublic())
+//            .cacheControl(CacheControl.noCache())
+//            .cacheControl(CacheControl.noStore())
             .body(formasDePagamentoModel);
   }
 
