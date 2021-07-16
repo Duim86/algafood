@@ -109,10 +109,10 @@ VALUES (true, 'Água 500ml Ouro Fino', 'Água', 2.75, 1),
        (true, 'Pizza Calabresa', 'Pizza', 25, 3);
 
 
-INSERT INTO forma_de_pagamento(id, descricao)
-VALUES (1, 'Cartão de crédito'),
-       (2, 'Cartão de débito'),
-       (3, 'Dinheiro');
+INSERT INTO forma_de_pagamento(id, descricao, data_atualizacao)
+VALUES (1, 'Cartão de crédito', utc_timestamp),
+       (2, 'Cartão de débito', utc_timestamp),
+       (3, 'Dinheiro', utc_timestamp);
 
 INSERT INTO restaurante_forma_pagamento (restaurante_id, forma_pagamento_id)
 VALUES (1, 1),

@@ -11,8 +11,11 @@ import org.springframework.http.CacheControl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.ServletWebRequest;
+import org.springframework.web.filter.ShallowEtagHeaderFilter;
 
 import javax.validation.Valid;
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -33,23 +36,50 @@ public class FormaDePagamentoController {
   private FormaDePagamentoInputDisassembler formaDePagamentoInputDisassembler;
 
   @GetMapping
-  public ResponseEntity<List<FormaDePagamentoModel>> listar(){
+  public ResponseEntity<List<FormaDePagamentoModel>> listar(ServletWebRequest request){
+    ShallowEtagHeaderFilter.disableContentCaching(request.getRequest());
+
+    String eTag = "0";
+    OffsetDateTime dataUltimaAtualizacao = formaDePagamentoRepository.getDataUltimaAtualizacao();
+
+    if(dataUltimaAtualizacao != null) {
+      eTag = String.valueOf(dataUltimaAtualizacao.toEpochSecond());
+    }
+    if(request.checkNotModified(eTag)) {
+      return null;
+    }
 
     var formasDePagamentoModel = formaDePagamentoModelAssembler.toCollectionModel(formaDePagamentoRepository.findAll());
 
     return ResponseEntity.ok()
-            .cacheControl(CacheControl.maxAge(10, TimeUnit.SECONDS))
+            .cacheControl(CacheControl.maxAge(10, TimeUnit.SECONDS).cachePublic())
+            .eTag(eTag)
             .body(formasDePagamentoModel);
   }
 
   @GetMapping("/{formaDePagamentoId}")
-  public ResponseEntity<FormaDePagamentoModel> buscar(@PathVariable Long formaDePagamentoId){
+  public ResponseEntity<FormaDePagamentoModel> buscar(ServletWebRequest request, @PathVariable Long formaDePagamentoId){
+    ShallowEtagHeaderFilter.disableContentCaching(request.getRequest());
+
+    String eTag = "0";
+    OffsetDateTime dataAtualizacao = formaDePagamentoRepository
+            .getDataAtualizacaoById(formaDePagamentoId);
+
+    if (dataAtualizacao != null) {
+      eTag = String.valueOf(dataAtualizacao.toEpochSecond());
+    }
+
+    if (request.checkNotModified(eTag)) {
+      return null;
+    }
+
     var formasDePagamentoModel = formaDePagamentoModelAssembler.toModel(cadastroFormaDePagamento.buscarOuFalhar(formaDePagamentoId));
 //
     return ResponseEntity.ok()
 //            .cacheControl(CacheControl.maxAge(10, TimeUnit.SECONDS))
 //            .cacheControl(CacheControl.maxAge(10, TimeUnit.SECONDS).cachePrivate())
             .cacheControl(CacheControl.maxAge(10, TimeUnit.SECONDS).cachePublic())
+            .eTag(eTag)
 //            .cacheControl(CacheControl.noCache())
 //            .cacheControl(CacheControl.noStore())
             .body(formasDePagamentoModel);

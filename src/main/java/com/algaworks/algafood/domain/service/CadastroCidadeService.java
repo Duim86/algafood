@@ -24,11 +24,8 @@ public class CadastroCidadeService {
   @Transactional
   public Cidade salvar(Cidade cidade) {
     Long estadoId = cidade.getEstado().getId();
-
     var estado = cadastroEstado.buscarOuFalhar(estadoId);
-
     cidade.setEstado(estado);
-
     return cidadeRepository.save(cidade);
   }
 
@@ -43,9 +40,7 @@ public class CadastroCidadeService {
 
     } catch (DataIntegrityViolationException e) {
       throw new EntidadeEmUsoException(
-              String.format(MSG_CIDADE_EM_USO, cidadeId));
-    }
-  }
+              String.format(MSG_CIDADE_EM_USO, cidadeId));    }}
 
   public Cidade buscarOuFalhar(Long cidadeId) {
     return cidadeRepository.findById(cidadeId)
