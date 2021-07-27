@@ -4,25 +4,26 @@ import com.algaworks.algafood.api.dtos.assembler.RestauranteModelAssembler;
 import com.algaworks.algafood.api.dtos.disassembler.RestauranteInputDisassembler;
 import com.algaworks.algafood.api.model.RestauranteModel;
 import com.algaworks.algafood.api.model.input.RestauranteInput;
+import com.algaworks.algafood.api.openapi.controller.RestauranteControllerOpenApi;
 import com.algaworks.algafood.api.view.RestauranteView;
 import com.algaworks.algafood.domain.exception.CidadeNaoEncontradaException;
 import com.algaworks.algafood.domain.exception.CozinhaNaoEncontradaException;
 import com.algaworks.algafood.domain.exception.NegocioException;
 import com.algaworks.algafood.domain.exception.RestauranteNaoEncontradoException;
-import com.algaworks.algafood.domain.model.Restaurante;
 import com.algaworks.algafood.domain.repository.RestauranteRepository;
 import com.algaworks.algafood.domain.service.CadastroRestauranteService;
+import com.fasterxml.jackson.annotation.JsonView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.converter.json.MappingJacksonValue;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("restaurantes")
-public class RestauranteController {
+@RequestMapping(value = "restaurantes", produces = MediaType.APPLICATION_JSON_VALUE)
+public class RestauranteController implements RestauranteControllerOpenApi {
 
   @Autowired
   private RestauranteRepository restauranteRepository;
@@ -39,40 +40,37 @@ public class RestauranteController {
   @Autowired
   private RestauranteInputDisassembler restauranteInputDisassembler;
 
+//  @GetMapping
+//  public MappingJacksonValue listar(@RequestParam(required = false) String projecao) {
+//    List<Restaurante> restaurantes = restauranteRepository.findAll();
+//    List<RestauranteModel> restauranteModel = restauranteModelAssembler.toCollectionModel(restaurantes);
+//
+//    var restauranteWrapper = new MappingJacksonValue(restauranteModel);
+//
+//    restauranteWrapper.setSerializationView(RestauranteView.Resumo.class);
+//
+//    if("apenas-nome".equals(projecao)) {
+//      restauranteWrapper.setSerializationView(RestauranteView.ApenasNome.class);
+//    }
+//    return restauranteWrapper;
+//  }
+
+
+  @Override
   @GetMapping
-  public MappingJacksonValue listar(@RequestParam(required = false) String projecao) {
-    List<Restaurante> restaurantes = restauranteRepository.findAll();
-    List<RestauranteModel> restauranteModel = restauranteModelAssembler.toCollectionModel(restaurantes);
-
-    var restauranteWrapper = new MappingJacksonValue(restauranteModel);
-
-    restauranteWrapper.setSerializationView(RestauranteView.Resumo.class);
-
-    if("apenas-nome".equals(projecao)) {
-      restauranteWrapper.setSerializationView(RestauranteView.ApenasNome.class);
-    }
-    return restauranteWrapper;
+  public List<RestauranteModel> listar() {
+    return restauranteModelAssembler.toCollectionModel(restauranteRepository.findAll());
   }
 
-//
-//  @GetMapping
-//  public List<RestauranteModel> listar() {
-//    return restauranteModelAssembler.toCollectionModel(restauranteRepository.findAll());
-//  }
-//
-//  @JsonView(RestauranteView.Resumo.class)
-//  @GetMapping(params = "projecao=resumo")
-//  public List<RestauranteModel> listarResumido() {
-//    return listar();
-//  }
-//
-//  @JsonView(RestauranteView.ApenasNome.class)
-//  @GetMapping(params = "projecao=apenas-nome")
-//  public List<RestauranteModel> listarApenasNome() {
-//    return listar();
-//  }
+  @Override
+  @JsonView(RestauranteView.ApenasNome.class)
+  @GetMapping(params = "projecao=apenas-nome")
+  public List<RestauranteModel> listarApenasNome() {
+    return listar();
+  }
 
 
+  @Override
   @GetMapping("/{restauranteId}")
   public RestauranteModel buscar(@PathVariable Long restauranteId) {
 
@@ -81,6 +79,7 @@ public class RestauranteController {
     return restauranteModelAssembler.toModel(restaurante);
   }
 
+  @Override
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
   public RestauranteModel adicionar(@RequestBody
@@ -93,6 +92,7 @@ public class RestauranteController {
     }
   }
 
+  @Override
   @PutMapping("/{restauranteId}")
   public RestauranteModel atualizar(@PathVariable Long restauranteId,
                                     @RequestBody @Valid RestauranteInput restauranteInput) {
@@ -110,6 +110,7 @@ public class RestauranteController {
     }
   }
 
+  @Override
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @DeleteMapping("/{restauranteId}")
   public void remover(@PathVariable Long restauranteId) {
@@ -117,12 +118,14 @@ public class RestauranteController {
     cadastroRestaurante.excluir(restauranteId);
   }
 
+  @Override
   @PutMapping("/{restauranteId}/ativo")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public void ativar(@PathVariable Long restauranteId) {
     cadastroRestaurante.ativar(restauranteId);
   }
 
+  @Override
   @DeleteMapping("/{restauranteId}/inativo")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public void inativar(@PathVariable Long restauranteId) {
@@ -130,6 +133,7 @@ public class RestauranteController {
   }
 
 
+  @Override
   @PutMapping("/ativacoes")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public void ativarEmMassa(@RequestBody List<Long> restauranteIds) {
@@ -140,6 +144,7 @@ public class RestauranteController {
     }
   }
 
+  @Override
   @DeleteMapping("/ativacoes")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public void inativarEmMassa(@RequestBody List<Long> restauranteIds) {
@@ -151,12 +156,14 @@ public class RestauranteController {
   }
 
 
+  @Override
   @PutMapping("/{restauranteId}/abertura")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public void abrir(@PathVariable Long restauranteId) {
     cadastroRestaurante.abrir(restauranteId);
   }
 
+  @Override
   @PutMapping("/{restauranteId}/fechamento")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public void fechar(@PathVariable Long restauranteId) {

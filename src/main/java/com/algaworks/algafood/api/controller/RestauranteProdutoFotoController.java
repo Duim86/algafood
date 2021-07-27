@@ -3,11 +3,13 @@ package com.algaworks.algafood.api.controller;
 import com.algaworks.algafood.api.dtos.assembler.FotoProdutoModelAssembler;
 import com.algaworks.algafood.api.model.FotoProdutoModel;
 import com.algaworks.algafood.api.model.input.FotoProdutoInput;
+import com.algaworks.algafood.api.openapi.controller.RestauranteProdutoFotoControllerOpenApi;
 import com.algaworks.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.algaworks.algafood.domain.model.FotoProduto;
 import com.algaworks.algafood.domain.service.CadastroProdutoService;
 import com.algaworks.algafood.domain.service.CatalogoFotoProdutoService;
 import com.algaworks.algafood.domain.service.FotoStorageService;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
@@ -16,14 +18,15 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.io.IOException;
 import java.util.List;
 
 @RestController
-@RequestMapping("/restaurantes/{restauranteId}/produtos/{produtoId}/foto")
-public class RestauranteProdutoFotoController {
+@RequestMapping(path ="/restaurantes/{restauranteId}/produtos/{produtoId}/foto", produces = MediaType.APPLICATION_JSON_VALUE)
+public class RestauranteProdutoFotoController implements RestauranteProdutoFotoControllerOpenApi {
 
 
   private final CadastroProdutoService cadastroProdutoService;
@@ -43,7 +46,8 @@ public class RestauranteProdutoFotoController {
   }
 
 
-  @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+  @Override
+  @GetMapping
   public FotoProdutoModel buscar(@PathVariable Long restauranteId,
                                  @PathVariable Long produtoId) {
     var fotoProduto = catalogoFotoProduto.buscarOuFalhar(restauranteId, produtoId);
@@ -51,10 +55,11 @@ public class RestauranteProdutoFotoController {
     return fotoProdutoModelAssembler.toModel(fotoProduto);
   }
 
-  @GetMapping
+  @Override
+  @GetMapping(produces = MediaType.ALL_VALUE)
   public ResponseEntity<Object> servirFoto(@PathVariable Long restauranteId,
-                                                        @PathVariable Long produtoId,
-                                                        @RequestHeader(name = "accept") String acceptHeader ) throws HttpMediaTypeNotAcceptableException {
+                                           @PathVariable Long produtoId,
+                                           @RequestHeader(name = "accept") String acceptHeader) throws HttpMediaTypeNotAcceptableException {
     try {
       var fotoProduto = catalogoFotoProduto.buscarOuFalhar(restauranteId, produtoId);
       var fotoRecuperada = fotoStorageService.recuperar(fotoProduto.getNomeArquivo());
@@ -81,15 +86,18 @@ public class RestauranteProdutoFotoController {
   }
 
 
+  @Override
   @PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   public FotoProdutoModel atualizarFoto(@PathVariable Long restauranteId,
                                         @PathVariable Long produtoId,
-                                        @Valid FotoProdutoInput fotoProdutoInput) throws IOException {
+                                        @Valid FotoProdutoInput fotoProdutoInput,
+                                        @ApiParam(value = "Arquivo da foto do produto (máximo 500KB, apenas JPG e PNG)", required = true)
+                                        MultipartFile arquivo) throws IOException {
 
 
     var produto = cadastroProdutoService.buscarOuFalhar(restauranteId, produtoId);
 
-    var arquivo = fotoProdutoInput.getArquivo();
+    // var arquivo = fotoProdutoInput.getArquivo();
 
     var foto = new FotoProduto();
     foto.setProduto(produto);
@@ -105,6 +113,7 @@ public class RestauranteProdutoFotoController {
 
   }
 
+  @Override
   @DeleteMapping
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public void excluir(@PathVariable Long restauranteId,

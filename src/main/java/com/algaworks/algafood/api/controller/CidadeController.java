@@ -1,5 +1,6 @@
 package com.algaworks.algafood.api.controller;
 
+import com.algaworks.algafood.api.openapi.controller.CidadeControllerOpenApi;
 import com.algaworks.algafood.api.dtos.assembler.CidadeModelAssembler;
 import com.algaworks.algafood.api.dtos.disassembler.CidadeInputDisassembler;
 import com.algaworks.algafood.api.model.CidadeModel;
@@ -9,16 +10,18 @@ import com.algaworks.algafood.domain.exception.NegocioException;
 import com.algaworks.algafood.domain.model.Cidade;
 import com.algaworks.algafood.domain.repository.CidadeRepository;
 import com.algaworks.algafood.domain.service.CadastroCidadeService;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/cidades")
-public class CidadeController {
+@RequestMapping(path = "/cidades", produces = MediaType.APPLICATION_JSON_VALUE)
+public class CidadeController implements CidadeControllerOpenApi {
   @Autowired
   private CidadeRepository cidadeRepository;
 
@@ -31,20 +34,23 @@ public class CidadeController {
   @Autowired
   private CidadeInputDisassembler cidadeInputDisassembler;
 
+  @Override
   @ResponseStatus(HttpStatus.OK)
   @GetMapping
   public List<CidadeModel> listar() {
     return cidadeModelAssembler.toCollectionModel(cidadeRepository.findAll());
   }
 
+  @Override
   @GetMapping("/{cidadeId}")
-  public CidadeModel buscar(@PathVariable Long cidadeId) {
+  public CidadeModel buscar(@ApiParam(value = "Id de uma cidade", example = "1") @PathVariable Long cidadeId) {
     return cidadeModelAssembler.toModel(cadastroCidade.buscarOuFalhar(cidadeId));
   }
 
+  @Override
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
-  public CidadeModel adicionar(@RequestBody @Valid CidadeInput cidadeInput) {
+  public CidadeModel adicionar(@ApiParam(name = "corpo", value = "Representação de uma nova cidade") @RequestBody @Valid CidadeInput cidadeInput) {
     try {
       var cidade = cidadeInputDisassembler.toDomainObject(cidadeInput);
       return cidadeModelAssembler.toModel(cadastroCidade.salvar(cidade));
@@ -53,10 +59,11 @@ public class CidadeController {
     }
   }
 
+  @Override
   @PutMapping("/{cidadeId}")
   @ResponseStatus(HttpStatus.OK)
-  public Cidade atualizar(@RequestBody @Valid CidadeInput cidadeInput,
-                          @PathVariable Long cidadeId) {
+  public Cidade atualizar(@ApiParam(name = "corpo", value = "Representação de uma cidade com os novos dados") @RequestBody @Valid CidadeInput cidadeInput,
+                          @ApiParam(value = "Id de uma cidade", example = "1") @PathVariable Long cidadeId) {
 
     var cidadeAtual = cadastroCidade.buscarOuFalhar(cidadeId);
 
@@ -71,9 +78,10 @@ public class CidadeController {
     }
   }
 
+  @Override
   @DeleteMapping("/{cidadeId}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  public void remover(@PathVariable Long cidadeId) {
+  public void remover(@ApiParam(value = "Id de uma cidade", example = "1") @PathVariable Long cidadeId) {
     cadastroCidade.excluir(cidadeId);
   }
 }

@@ -1,5 +1,6 @@
 package com.algaworks.algafood.api.controller;
 
+import com.algaworks.algafood.api.openapi.controller.EstatisticasControllerOpenApi;
 import com.algaworks.algafood.domain.filter.VendaDiariaFilter;
 import com.algaworks.algafood.domain.model.dto.VendaDiaria;
 import com.algaworks.algafood.domain.service.VendaQueryService;
@@ -18,7 +19,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/estatisticas")
-public class EstatisticasController {
+public class EstatisticasController implements EstatisticasControllerOpenApi {
 
   @Autowired
   private VendaQueryService vendaQueryService;
@@ -26,12 +27,14 @@ public class EstatisticasController {
   @Autowired
   private VendaReportService vendaReportService;
 
+  @Override
   @GetMapping(path = "/vendas-diarias", produces = MediaType.APPLICATION_JSON_VALUE)
   public List<VendaDiaria> consultarVendasDiarias(VendaDiariaFilter filtro,
                                                   @RequestParam(required = false, defaultValue = "+00:00") String timeOffset){
     return vendaQueryService.consultarVendasDiarias(filtro, timeOffset);
   }
 
+  @Override
   @GetMapping(path = "/vendas-diarias", produces = MediaType.APPLICATION_PDF_VALUE)
   public ResponseEntity<byte[]> consultarVendasDiariasPdf(VendaDiariaFilter filtro,
                                                           @RequestParam(required = false, defaultValue = "+00:00") String timeOffset) throws JRException {

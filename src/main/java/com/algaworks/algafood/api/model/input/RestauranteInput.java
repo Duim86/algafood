@@ -1,5 +1,6 @@
 package com.algaworks.algafood.api.model.input;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,9 +15,11 @@ import java.math.BigDecimal;
 public class RestauranteInput {
 
   @NotBlank
+  @ApiModelProperty(example = "Thai Food", required = true)
   private String nome;
 
   @PositiveOrZero
+  @ApiModelProperty(example = "5.99", required = true)
   @NotNull
   private BigDecimal taxaFrete;
 
