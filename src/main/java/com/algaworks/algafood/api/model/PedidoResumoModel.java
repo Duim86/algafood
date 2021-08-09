@@ -1,16 +1,20 @@
 package com.algaworks.algafood.api.model;
 
 import io.swagger.annotations.ApiModelProperty;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.hateoas.RepresentationModel;
+import org.springframework.hateoas.server.core.Relation;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 
-//@JsonFilter("pedidoFilter")
+@Relation(collectionRelation = "pedidos")
 @Setter
 @Getter
-public class PedidoResumoModel {
+@EqualsAndHashCode(callSuper = false)
+public class PedidoResumoModel extends RepresentationModel<PedidoResumoModel> {
 
   @ApiModelProperty(example = "b172992b-37a7-4a07-8e06-cf230bcb186a")
   private String codigo;

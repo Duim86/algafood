@@ -97,8 +97,6 @@ public class RestauranteProdutoFotoController implements RestauranteProdutoFotoC
 
     var produto = cadastroProdutoService.buscarOuFalhar(restauranteId, produtoId);
 
-    // var arquivo = fotoProdutoInput.getArquivo();
-
     var foto = new FotoProduto();
     foto.setProduto(produto);
     foto.setDescricao(fotoProdutoInput.getDescricao());

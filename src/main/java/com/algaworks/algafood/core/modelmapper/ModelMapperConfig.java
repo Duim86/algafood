@@ -27,18 +27,4 @@ public class ModelMapperConfig {
 
     return modelMapper;
   }
-
-
-
-
-
-
-//  @Bean
-//  public ModelMapper modelMapper() {
-//    var modelMapper = new ModelMapper();
-//    modelMapper.createTypeMap(Restaurante.class, RestauranteModel.class)
-//            .addMapping(Restaurante::getTaxaFrete, RestauranteModel::setPrecoFrete);
-//
-//    return modelMapper;
-//  }
 }
