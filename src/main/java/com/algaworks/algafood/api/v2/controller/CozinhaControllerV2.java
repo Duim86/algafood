@@ -4,6 +4,7 @@ import com.algaworks.algafood.api.v2.assembler.CozinhaInputDisassemblerV2;
 import com.algaworks.algafood.api.v2.assembler.CozinhaModelAssemblerV2;
 import com.algaworks.algafood.api.v2.model.CozinhaModelV2;
 import com.algaworks.algafood.api.v2.model.input.CozinhaInputV2;
+import com.algaworks.algafood.api.v2.openapi.controller.CozinhaControllerOpenApiV2;
 import com.algaworks.algafood.domain.model.Cozinha;
 import com.algaworks.algafood.domain.repository.CozinhaRepository;
 import com.algaworks.algafood.domain.service.CadastroCozinhaService;
@@ -19,7 +20,7 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping(path = "/v2/cozinhas", produces = MediaType.APPLICATION_JSON_VALUE)
-public class CozinhaControllerV2 {
+public class CozinhaControllerV2 implements CozinhaControllerOpenApiV2 {
 
   @Autowired
   private CozinhaRepository cozinhaRepository;
@@ -37,6 +38,7 @@ public class CozinhaControllerV2 {
   @Autowired
   private PagedResourcesAssembler<Cozinha> pagedResourcesAssembler;
 
+  @Override
   @GetMapping()
   public PagedModel<CozinhaModelV2> listar(Pageable pageable) {
     var cozinhasPage = cozinhaRepository.findAll(pageable);
@@ -45,11 +47,13 @@ public class CozinhaControllerV2 {
             .toModel(cozinhasPage, cozinhaModelAssembler);
   }
 
+  @Override
   @GetMapping("/{cozinhaId}")
   public CozinhaModelV2 buscar(@PathVariable Long cozinhaId) {
     return cozinhaModelAssembler.toModel(cadastroCozinha.buscarOuFalhar(cozinhaId));
   }
 
+  @Override
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
   public CozinhaModelV2 adicionar(@RequestBody @Valid CozinhaInputV2 cozinhaInput) {
@@ -58,6 +62,7 @@ public class CozinhaControllerV2 {
     return cozinhaModelAssembler.toModel(cadastroCozinha.salvar(restaurante));
   }
 
+  @Override
   @PutMapping("/{cozinhaId}")
   public CozinhaModelV2 atualizar(@RequestBody @Valid CozinhaInputV2 cozinhaInput,
                                 @PathVariable Long cozinhaId) {
@@ -69,6 +74,7 @@ public class CozinhaControllerV2 {
 
   }
 
+  @Override
   @DeleteMapping("/{cozinhaId}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public void remover(@PathVariable Long cozinhaId) {

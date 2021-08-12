@@ -15,8 +15,8 @@ import javax.servlet.Filter;
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
-  @Autowired
-  private ApiRetirementHandler apiRetirementHandler;
+//  @Autowired
+//  private ApiRetirementHandler apiRetirementHandler;
 
 
   @Override
@@ -30,10 +30,10 @@ public class WebConfig implements WebMvcConfigurer {
     configurer.defaultContentType(AlgaMediaTypes.V2_APPLICATION_JSON);
   }
 
-  @Override
-  public void addInterceptors(InterceptorRegistry registry) {
-    registry.addInterceptor(apiRetirementHandler);
-  }
+//  @Override
+//  public void addInterceptors(InterceptorRegistry registry) {
+//    registry.addInterceptor(apiRetirementHandler);
+//  }
 
   @Bean
   public Filter shallowEtagHeaderFilter() {

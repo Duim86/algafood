@@ -3,6 +3,10 @@ package com.algaworks.algafood.core.openapi;
 import com.algaworks.algafood.api.exceptionhandler.Problem;
 import com.algaworks.algafood.api.v1.model.*;
 import com.algaworks.algafood.api.v1.openapi.model.*;
+import com.algaworks.algafood.api.v2.model.CidadeModelV2;
+import com.algaworks.algafood.api.v2.model.CozinhaModelV2;
+import com.algaworks.algafood.api.v2.openapi.model.CidadesModelOpenApiV2;
+import com.algaworks.algafood.api.v2.openapi.model.CozinhasModelOpenApiV2;
 import com.fasterxml.classmate.TypeResolver;
 import org.apache.http.HttpStatus;
 import org.springframework.context.annotation.Bean;
@@ -138,7 +142,18 @@ public class SpringFoxConfig implements WebMvcConfigurer {
             .directModelSubstitute(Pageable.class, PageableModelOpenApi.class)
             .directModelSubstitute(Links.class, LinksModelOpenApi.class)
 
-            .apiInfo(apiInfoV2());
+            .alternateTypeRules(AlternateTypeRules.newRule(
+                    typeResolver.resolve(PagedModel.class, CozinhaModelV2.class),
+                    CozinhasModelOpenApiV2.class))
+
+            .alternateTypeRules(AlternateTypeRules.newRule(
+                    typeResolver.resolve(CollectionModel.class, CidadeModelV2.class),
+                    CidadesModelOpenApiV2.class))
+
+            .apiInfo(apiInfoV2())
+            .tags(new Tag("Cozinhas", "Gerencia as cozinhas"))
+            .tags(new Tag("Cidades", "Gerencia as cidades"));
+
   }
 
   private List<ResponseMessage> globalGetResponseMessages() {

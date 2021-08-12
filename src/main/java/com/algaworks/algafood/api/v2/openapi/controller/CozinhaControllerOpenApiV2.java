@@ -1,0 +1,42 @@
+package com.algaworks.algafood.api.v2.openapi.controller;
+
+import com.algaworks.algafood.api.exceptionhandler.Problem;
+import com.algaworks.algafood.api.v2.model.CozinhaModelV2;
+import com.algaworks.algafood.api.v2.model.input.CozinhaInputV2;
+import io.swagger.annotations.*;
+import org.springframework.data.domain.Pageable;
+import org.springframework.hateoas.PagedModel;
+
+@Api(tags = "Cozinhas")
+public interface CozinhaControllerOpenApiV2 {
+  @ApiOperation("Lista as cozinhas com paginação")
+  PagedModel<CozinhaModelV2> listar(Pageable pageable);
+
+  @ApiOperation("Busca uma cozinha por Id")
+  @ApiResponses({
+          @ApiResponse(code = 400, message = "Id da cozinha inválida", response = Problem.class),
+          @ApiResponse(code = 404, message = "Cozinha não encontrada", response = Problem.class)
+  })
+  CozinhaModelV2 buscar(@ApiParam(value = "Id de uma cozinha", example = "1", required = true) Long cozinhaId);
+
+  @ApiOperation("Cadastra uma cozinha")
+  @ApiResponses({
+          @ApiResponse(code = 201, message = "Cozinha cadastrada"),
+  })
+  CozinhaModelV2 adicionar(@ApiParam(name = "corpo", value = "Representação de uma nova cozinha") CozinhaInputV2 cozinhaInput);
+
+  @ApiOperation("Atualiza uma cozinha por Id")
+  @ApiResponses({
+          @ApiResponse(code = 200, message = "Cozinha atualizada"),
+          @ApiResponse(code = 404, message = "Cozinha não encontrada", response = Problem.class),
+  })
+  CozinhaModelV2 atualizar(@ApiParam(name = "corpo", value = "Representação de uma nova cozinha") CozinhaInputV2 cozinhaInput,
+                         @ApiParam(value = "Id de uma cozinha", example = "1", required = true) Long cozinhaId);
+
+  @ApiOperation("Remove uma cozinha por Id")
+  @ApiResponses({
+          @ApiResponse(code = 204, message = "Cozinha excluida"),
+          @ApiResponse(code = 404, message = "Cozinha não encontrada", response = Problem.class),
+  })
+  void remover(@ApiParam(value = "Id de uma cozinha", example = "1", required = true) Long cozinhaId);
+}

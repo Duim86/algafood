@@ -5,6 +5,7 @@ import com.algaworks.algafood.api.v2.assembler.CidadeInputDisassemblerV2;
 import com.algaworks.algafood.api.v2.assembler.CidadeModelAssemblerV2;
 import com.algaworks.algafood.api.v2.model.CidadeModelV2;
 import com.algaworks.algafood.api.v2.model.input.CidadeInputV2;
+import com.algaworks.algafood.api.v2.openapi.controller.CidadeControllerOpenApiV2;
 import com.algaworks.algafood.core.web.AlgaMediaTypes;
 import com.algaworks.algafood.domain.exception.EstadoNaoEncontradoException;
 import com.algaworks.algafood.domain.exception.NegocioException;
@@ -22,7 +23,7 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping(path = "/v2/cidades", produces = MediaType.APPLICATION_JSON_VALUE)
-public class CidadeControllerV2 {
+public class CidadeControllerV2 implements CidadeControllerOpenApiV2 {
   @Autowired
   private CidadeRepository cidadeRepository;
 
@@ -35,6 +36,7 @@ public class CidadeControllerV2 {
   @Autowired
   private CidadeInputDisassemblerV2 cidadeInputDisassembler;
 
+  @Override
   @ResponseStatus(HttpStatus.OK)
   @GetMapping
   public CollectionModel<CidadeModelV2> listar() {
@@ -43,12 +45,14 @@ public class CidadeControllerV2 {
 
   }
 
+  @Override
   @GetMapping("/{cidadeId}")
   public CidadeModelV2 buscar(@ApiParam(value = "Id de uma cidade", example = "1") @PathVariable Long cidadeId) {
 
     return cidadeModelAssembler.toModel(cadastroCidade.buscarOuFalhar(cidadeId));
   }
 
+  @Override
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
   public CidadeModelV2 adicionar(@ApiParam(name = "corpo", value = "Representação de uma nova cidade") @RequestBody @Valid CidadeInputV2 cidadeInput) {
@@ -64,6 +68,7 @@ public class CidadeControllerV2 {
     }
   }
 
+  @Override
   @PutMapping("/{cidadeId}")
   @ResponseStatus(HttpStatus.OK)
   public Cidade atualizar(@ApiParam(name = "corpo", value = "Representação de uma cidade com os novos dados") @RequestBody @Valid CidadeInputV2 cidadeInput,
@@ -82,6 +87,7 @@ public class CidadeControllerV2 {
     }
   }
 
+  @Override
   @DeleteMapping("/{cidadeId}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public void remover(@ApiParam(value = "Id de uma cidade", example = "1") @PathVariable Long cidadeId) {
