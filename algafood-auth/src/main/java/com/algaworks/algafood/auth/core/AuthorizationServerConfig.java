@@ -1,8 +1,9 @@
-package com.algaworks.algafood.auth;
+package com.algaworks.algafood.auth.core;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -13,8 +14,11 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Aut
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.CompositeTokenGranter;
 import org.springframework.security.oauth2.provider.TokenGranter;
+import org.springframework.security.oauth2.provider.approval.ApprovalStore;
+import org.springframework.security.oauth2.provider.approval.TokenApprovalStore;
 import org.springframework.security.oauth2.provider.token.TokenStore;
-import org.springframework.security.oauth2.provider.token.store.redis.RedisTokenStore;
+import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
+import org.springframework.security.oauth2.provider.token.store.KeyStoreKeyFactory;
 
 import java.util.Arrays;
 
@@ -32,7 +36,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
   private UserDetailsService userDetailsService;
 
   @Autowired
-  private RedisConnectionFactory redisConnectionFactory;
+  private JwtKeyStoreProperties jwtKeyStoreProperties;
 
   @Override
   public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
@@ -68,6 +72,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
   public void configure(AuthorizationServerSecurityConfigurer security){
     security
             .checkTokenAccess("permitAll()")
+            .tokenKeyAccess("permitAll()")
             .allowFormAuthenticationForClients();
   }
 
@@ -77,12 +82,33 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
             .authenticationManager(authenticationManager)
             .userDetailsService(userDetailsService)
             .reuseRefreshTokens(false)
-            .tokenStore(redisTokenStore())
+            .accessTokenConverter(jwtAccessTokenConverter())
+            .approvalStore(approvalStore(endpoints.getTokenStore()))
             .tokenGranter(tokenGranter(endpoints));
   }
 
-  private TokenStore redisTokenStore() {
-    return new RedisTokenStore(redisConnectionFactory);
+  private ApprovalStore approvalStore(TokenStore tokenStore) {
+    var approvalStore = new TokenApprovalStore();
+
+    approvalStore.setTokenStore(tokenStore);
+
+    return approvalStore;
+  }
+
+  @Bean
+  public JwtAccessTokenConverter jwtAccessTokenConverter() {
+    var jwtAccessTokenConverter = new JwtAccessTokenConverter();
+
+    var jksResource = new ClassPathResource(jwtKeyStoreProperties.getPath());
+    var keyStorePass = jwtKeyStoreProperties.getPassword();
+    var keyPairAlias = jwtKeyStoreProperties.getKeypairAlias();
+
+    var keyStoreKeyFactory = new KeyStoreKeyFactory(jksResource, keyStorePass.toCharArray());
+    var keyPair = keyStoreKeyFactory.getKeyPair(keyPairAlias);
+
+    jwtAccessTokenConverter.setKeyPair(keyPair);
+
+    return jwtAccessTokenConverter;
   }
 
   private TokenGranter tokenGranter(AuthorizationServerEndpointsConfigurer endpoints) {

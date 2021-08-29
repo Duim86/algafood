@@ -143,10 +143,10 @@ VALUES (1, 1),
 
 
 INSERT INTO usuario(id, data_cadastro, email, nome, senha)
-VALUES (1, utc_timestamp, 'zanlorenzi@gmail.com', 'Alexandre Zanlorenzi', '123'),
-       (2, utc_timestamp, 'azanlorenzi@yahoo.com', 'Alexandre Zanlorenzi', '123'),
-       (3, utc_timestamp, 'android.duim@gmail.com', 'Alexandre Zanlorenzi', '123'),
-       (4, utc_timestamp, 'Manoel Lima', 'manoel.loja@gmail.com', '123');
+VALUES (1, utc_timestamp, 'zanlorenzi@gmail.com', 'Alexandre Zanlorenzi', '$2a$12$lnTue1cTEo.vRNtTbA9GB.u9SaoTyoccO0ng3Txm3PtuqAB3nqDRS'),
+       (2, utc_timestamp, 'azanlorenzi@yahoo.com', 'Alexandre Zanlorenzi', '$2a$12$lnTue1cTEo.vRNtTbA9GB.u9SaoTyoccO0ng3Txm3PtuqAB3nqDRS'),
+       (3, utc_timestamp, 'android.duim@gmail.com', 'Alexandre Zanlorenzi', '$2a$12$lnTue1cTEo.vRNtTbA9GB.u9SaoTyoccO0ng3Txm3PtuqAB3nqDRS'),
+       (4, utc_timestamp, 'manoel.loja@gmail.com', 'Manoel Lima', '123');
 
 INSERT INTO usuario_grupo (usuario_id, grupo_id)
 VALUES (1, 1),
