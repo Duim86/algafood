@@ -8,6 +8,7 @@ import com.algaworks.algafood.domain.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,6 +25,8 @@ public class CadastroUsuarioService {
   @Autowired
   private CadastroGrupoService cadastroGrupo;
 
+  @Autowired
+  private PasswordEncoder passwordEncoder;
 
   @Transactional
   public Usuario salvar(Usuario usuario) {
@@ -36,21 +39,23 @@ public class CadastroUsuarioService {
       throw new NegocioException("Já existente um usuário cadastrado com o email " + usuario.getEmail());
     }
 
+    if (usuario.isNovo()) {
+      usuario.setSenha(passwordEncoder.encode(usuario.getSenha()));
+    }
+
     return usuarioRepository.save(usuario);
   }
 
   @Transactional
-  public void alterarSenha(Long usuarioId, String senhaAtual, String senhaNova){
+  public void alterarSenha(Long usuarioId, String senhaAtual, String novaSenha) {
+    Usuario usuario = buscarOuFalhar(usuarioId);
 
-    var usuario = buscarOuFalhar(usuarioId);
-
-    if (usuario.senhaNaoCoincideCom(senhaAtual)) {
-      throw new NegocioException("Senha atual informada não coincide com a senha do usuário");
+    if (!passwordEncoder.matches(senhaAtual, usuario.getSenha())) {
+      throw new NegocioException("Senha atual informada não coincide com a senha do usuário.");
     }
 
-    usuario.setSenha(senhaNova);
+    usuario.setSenha(passwordEncoder.encode(novaSenha));
   }
-
   @Transactional
   public void excluir(Long usuarioId) {
     try {

@@ -5,12 +5,13 @@ import com.algaworks.algafood.api.v1.disassembler.CozinhaInputDisassembler;
 import com.algaworks.algafood.api.v1.model.CozinhaModel;
 import com.algaworks.algafood.api.v1.model.input.CozinhaInput;
 import com.algaworks.algafood.api.v1.openapi.controller.CozinhaControllerOpenApi;
+import com.algaworks.algafood.core.security.CheckSecurity;
+import com.algaworks.algafood.core.security.PodeConsultarCozinhas;
+import com.algaworks.algafood.core.security.PodeEditarCozinhas;
 import com.algaworks.algafood.domain.model.Cozinha;
 import com.algaworks.algafood.domain.repository.CozinhaRepository;
 import com.algaworks.algafood.domain.service.CadastroCozinhaService;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedResourcesAssembler;
@@ -42,6 +43,7 @@ public class CozinhaController implements CozinhaControllerOpenApi {
   @Autowired
   private PagedResourcesAssembler<Cozinha> pagedResourcesAssembler;
 
+  @CheckSecurity.Cozinhas.PodeConsultar
   @Override
   @GetMapping()
   public PagedModel<CozinhaModel> listar(Pageable pageable) {
@@ -54,12 +56,14 @@ public class CozinhaController implements CozinhaControllerOpenApi {
             .toModel(cozinhasPage, cozinhaModelAssembler);
   }
 
+  @CheckSecurity.Cozinhas.PodeConsultar
   @Override
   @GetMapping("/{cozinhaId}")
   public CozinhaModel buscar(@PathVariable Long cozinhaId) {
     return cozinhaModelAssembler.toModel(cadastroCozinha.buscarOuFalhar(cozinhaId));
   }
 
+  @CheckSecurity.Cozinhas.PodeEditar
   @Override
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
@@ -69,6 +73,7 @@ public class CozinhaController implements CozinhaControllerOpenApi {
     return cozinhaModelAssembler.toModel(cadastroCozinha.salvar(restaurante));
   }
 
+  @CheckSecurity.Cozinhas.PodeEditar
   @Override
   @PutMapping("/{cozinhaId}")
   public CozinhaModel atualizar(@RequestBody @Valid CozinhaInput cozinhaInput,
@@ -81,6 +86,7 @@ public class CozinhaController implements CozinhaControllerOpenApi {
 
   }
 
+  @CheckSecurity.Cozinhas.PodeEditar
   @Override
   @DeleteMapping("/{cozinhaId}")
   @ResponseStatus(HttpStatus.NO_CONTENT)

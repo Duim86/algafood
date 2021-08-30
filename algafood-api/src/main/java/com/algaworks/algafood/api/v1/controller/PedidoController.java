@@ -9,10 +9,12 @@ import com.algaworks.algafood.api.v1.model.input.PedidoInput;
 import com.algaworks.algafood.api.v1.openapi.controller.PedidoControllerOpenApi;
 import com.algaworks.algafood.core.data.PageWrapper;
 import com.algaworks.algafood.core.data.PageableTranslator;
+import com.algaworks.algafood.core.security.AlgaSecurity;
 import com.algaworks.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.algaworks.algafood.domain.exception.NegocioException;
 import com.algaworks.algafood.domain.filter.PedidoFilter;
 import com.algaworks.algafood.domain.model.Pedido;
+import com.algaworks.algafood.domain.model.Usuario;
 import com.algaworks.algafood.domain.repository.PedidoRepository;
 import com.algaworks.algafood.domain.service.EmissaoPedidoService;
 import com.algaworks.algafood.infrastructure.repository.spec.PedidoSpecs;
@@ -51,6 +53,9 @@ public class PedidoController implements PedidoControllerOpenApi {
   @Autowired
   private PagedResourcesAssembler<Pedido> pagedResourcesAssembler;
 
+  @Autowired
+  private AlgaSecurity algaSecurity;
+
   @Override
   @GetMapping
   public PagedModel<PedidoResumoModel> pesquisar(PedidoFilter filtro,
@@ -76,10 +81,16 @@ public class PedidoController implements PedidoControllerOpenApi {
   @Override
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
-  public PedidoModel salvar(@RequestBody @Valid PedidoInput pedidoInput) {
+  public PedidoModel salvar(@Valid @RequestBody PedidoInput pedidoInput) {
     try {
-      var pedido = pedidoInputDisassembler.toDomainObject(pedidoInput);
-      return pedidoModelAssembler.toModel(emissaoPedido.salvar(pedido));
+      Pedido novoPedido = pedidoInputDisassembler.toDomainObject(pedidoInput);
+
+      novoPedido.setCliente(new Usuario());
+      novoPedido.getCliente().setId(algaSecurity.getUsuarioId());
+
+      novoPedido = emissaoPedido.salvar(novoPedido);
+
+      return pedidoModelAssembler.toModel(novoPedido);
     } catch (EntidadeNaoEncontradaException e) {
       throw new NegocioException(e.getMessage(), e);
     }

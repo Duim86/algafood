@@ -53,7 +53,7 @@ public class EmissaoPedidoService {
   }
 
   public void validarPedido(Pedido pedido) {
-    var usuario = cadastroUsuario.buscarOuFalhar(1L);
+    var usuario = cadastroUsuario.buscarOuFalhar(pedido.getCliente().getId());
     var restaurante = cadastroRestaurante.buscarOuFalhar(pedido.getRestaurante().getId());
     var cidade = cadastroCidade.buscarOuFalhar(pedido.getEnderecoEntrega().getCidade().getId());
     var formaDePagamento = formaDePagamentoService.buscarOuFalhar(pedido.getFormaDePagamento().getId());

@@ -125,36 +125,79 @@ VALUES (1, 1),
 
 INSERT INTO grupo (id, nome)
 VALUES (1, 'Gerente'),
-       (2, 'Secretária'),
-       (3, 'Cadastrador');
+       (2, 'Vendedor'),
+       (3, 'Secretária'),
+       (4, 'Cadastrador');
 
 INSERT INTO permissao (id, nome, descricao)
-VALUES (1, 'CONSULTAR_COZINHA', 'Permite consultar cozinha'),
-       (2, 'CADASTRAR_COZINHA', 'Permite cadastrar cozinha'),
-       (3, 'CADASTRAR_RESTAURANTE', 'Permite cadastrar restaurante');
+VALUES (1, 'CONSULTAR_COZINHAS', 'Permite consultar cozinhas'),
+       (2, 'EDITAR_COZINHAS', 'Permite editar cozinhas'),
+       (3, 'CONSULTAR_FORMAS_PAGAMENTO', 'Permite consultar formas de pagamento'),
+       (4, 'EDITAR_FORMAS_PAGAMENTO', 'Permite criar ou editar formas de pagamento'),
+       (5, 'CONSULTAR_CIDADES', 'Permite consultar cidades'),
+       (6, 'EDITAR_CIDADES', 'Permite criar ou editar cidades'),
+       (7, 'CONSULTAR_ESTADOS', 'Permite consultar estados'),
+       (8, 'EDITAR_ESTADOS', 'Permite criar ou editar estados'),
+       (9, 'CONSULTAR_USUARIOS', 'Permite consultar usuários'),
+       (10, 'EDITAR_USUARIOS', 'Permite criar ou editar usuários'),
+       (11, 'CONSULTAR_RESTAURANTES', 'Permite consultar restaurantes'),
+       (12, 'EDITAR_RESTAURANTES', 'Permite criar, editar ou gerenciar restaurantes'),
+       (13, 'CONSULTAR_PRODUTOS', 'Permite consultar produtos'),
+       (14, 'EDITAR_PRODUTOS', 'Permite criar ou editar produtos'),
+       (15, 'CONSULTAR_PEDIDOS', 'Permite consultar pedidos'),
+       (16, 'GERENCIAR_PEDIDOS', 'Permite gerenciar pedidos'),
+       (17, 'GERAR_RELATORIOS', 'Permite gerar relatórios');
+
+# Adiciona todas as permissoes no grupo do gerente
+INSERT INTO grupo_permissao (grupo_id, permissao_id)
+SELECT 1, id
+FROM permissao;
+
+# Adiciona permissoes no grupo do vendedor
+INSERT INTO grupo_permissao (grupo_id, permissao_id)
+SELECT 2, id
+FROM permissao
+WHERE nome LIKE 'CONSULTAR_%';
 
 INSERT INTO grupo_permissao (grupo_id, permissao_id)
-VALUES (1, 1),
-       (1, 2),
-       (2, 2),
-       (3, 3),
-       (3, 1),
-       (2, 1);
+VALUES (2, 14);
+
+# Adiciona permissoes no grupo do auxiliar
+INSERT INTO grupo_permissao (grupo_id, permissao_id)
+SELECT 3, id
+FROM permissao
+WHERE nome LIKE 'CONSULTAR_%';
+
+# Adiciona permissoes no grupo cadastrador
+INSERT INTO grupo_permissao (grupo_id, permissao_id)
+SELECT 4, id
+FROM permissao
+WHERE nome LIKE '%_RESTAURANTES'
+   OR nome LIKE '%_PRODUTOS';
 
 
-INSERT INTO usuario(id, data_cadastro, email, nome, senha)
-VALUES (1, utc_timestamp, 'zanlorenzi@gmail.com', 'Alexandre Zanlorenzi', '$2a$12$lnTue1cTEo.vRNtTbA9GB.u9SaoTyoccO0ng3Txm3PtuqAB3nqDRS'),
-       (2, utc_timestamp, 'azanlorenzi@yahoo.com', 'Alexandre Zanlorenzi', '$2a$12$lnTue1cTEo.vRNtTbA9GB.u9SaoTyoccO0ng3Txm3PtuqAB3nqDRS'),
-       (3, utc_timestamp, 'android.duim@gmail.com', 'Alexandre Zanlorenzi', '$2a$12$lnTue1cTEo.vRNtTbA9GB.u9SaoTyoccO0ng3Txm3PtuqAB3nqDRS'),
-       (4, utc_timestamp, 'manoel.loja@gmail.com', 'Manoel Lima', '123');
+INSERT INTO usuario (id, nome, email, senha, data_cadastro)
+VALUES (1, 'João da Silva', 'joao.ger@algafood.com.br', '$2y$12$NSsM4gEOR7MKogflKR7GMeYugkttjNhAJMvFdHrBLaLp2HzlggP5W',
+        utc_timestamp),
+       (2, 'Maria Joaquina', 'maria.vnd@algafood.com.br',
+        '$2y$12$NSsM4gEOR7MKogflKR7GMeYugkttjNhAJMvFdHrBLaLp2HzlggP5W', utc_timestamp),
+       (3, 'José Souza', 'jose.aux@algafood.com.br', '$2y$12$NSsM4gEOR7MKogflKR7GMeYugkttjNhAJMvFdHrBLaLp2HzlggP5W',
+        utc_timestamp),
+       (4, 'Sebastião Martins', 'sebastiao.cad@algafood.com.br',
+        '$2y$12$NSsM4gEOR7MKogflKR7GMeYugkttjNhAJMvFdHrBLaLp2HzlggP5W', utc_timestamp),
+       (5, 'Manoel Lima', 'manoel.loja@gmail.com', '$2y$12$NSsM4gEOR7MKogflKR7GMeYugkttjNhAJMvFdHrBLaLp2HzlggP5W',
+        utc_timestamp),
+       (6, 'Débora Mendonça', 'email.teste.aw+debora@gmail.com',
+        '$2y$12$NSsM4gEOR7MKogflKR7GMeYugkttjNhAJMvFdHrBLaLp2HzlggP5W', utc_timestamp),
+       (7, 'Carlos Lima', 'email.teste.aw+carlos@gmail.com',
+        '$2y$12$NSsM4gEOR7MKogflKR7GMeYugkttjNhAJMvFdHrBLaLp2HzlggP5W', utc_timestamp);
 
 INSERT INTO usuario_grupo (usuario_id, grupo_id)
 VALUES (1, 1),
        (1, 2),
        (2, 2),
        (3, 3),
-       (3, 1),
-       (2, 1);
+       (4, 4);
 
 INSERT INTO restaurante_usuario_responsavel (restaurante_id, usuario_id)
 VALUES (1, 4),
