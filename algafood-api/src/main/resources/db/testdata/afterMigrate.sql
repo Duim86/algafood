@@ -32,6 +32,8 @@ delete
 from item_pedido;
 delete
 from foto_produto;
+delete
+from oauth_client_details;
 
 
 set foreign_key_checks = 1;
@@ -153,7 +155,9 @@ FROM permissao
 WHERE nome LIKE 'CONSULTAR_%';
 
 INSERT INTO grupo_permissao (grupo_id, permissao_id)
-SELECT 2, id FROM permissao WHERE nome = 'EDITAR_RESTAURANTES';
+SELECT 2, id
+FROM permissao
+WHERE nome = 'EDITAR_RESTAURANTES';
 
 # Adiciona permissoes no grupo do auxiliar
 INSERT INTO grupo_permissao (grupo_id, permissao_id)
@@ -224,6 +228,23 @@ INSERT INTO item_pedido (id, pedido_id, produto_id, quantidade, preco_unitario, 
 VALUES (3, 2, 6, 1, 79, 79, 'Ao ponto'),
        (2, 1, 2, 2, 110, 220, 'Menos picante, por favor'),
        (1, 1, 1, 1, 78.9, 78.9, null);
+
+INSERT INTO oauth_client_details (client_id, resource_ids, client_secret,
+                                  scope, authorized_grant_types, web_server_redirect_uri, authorities,
+                                  access_token_validity, refresh_token_validity, autoapprove)
+VALUES ('algafood-web', null, '$2y$12$w3igMjsfS5XoAYuowoH3C.54vRFWlcXSHLjX7MwF990Kc2KKKh72e',
+        'READ,WRITE', 'password', null, null,
+        60 * 60 * 6, 60 * 24 * 60 * 60, null),
+
+       ('foodanalytics', null, '$2y$12$fahbH37S2pyk1RPuIHKP.earzFmgAJJGo26rE.59vf4wwiiTKHnzO',
+        'READ,WRITE', 'authorization_code', 'http://localhost:5500', null,
+        null, null, null),
+
+       ('faturamento', null, '$2y$12$fHixriC7yXX/i1/CmpnGH.RFyK/l5YapLCFOEbIktONjE8ZDykSnu',
+        'READ,WRITE', 'client_credentials', null, 'CONSULTAR_PEDIDOS,GERAR_RELATORIOS',
+        null, null, null);
+
+
 
 
 

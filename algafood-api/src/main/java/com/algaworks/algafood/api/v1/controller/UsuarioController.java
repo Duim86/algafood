@@ -53,7 +53,6 @@ public class UsuarioController implements UsuarioControllerOpenApi {
   @Override
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
-  @UsuariosGruposPermissoes.PodeEditar
   public UsuarioModel adicionar(@RequestBody @Valid UsuarioComSenhaInput usuarioInput) {
       var usuario = usuarioInputDisassembler.toDomainObject(usuarioInput);
       return usuarioModelAssembler.toModel(cadastroUsuario.salvar(usuario));
@@ -61,7 +60,7 @@ public class UsuarioController implements UsuarioControllerOpenApi {
 
   @Override
   @PutMapping("/{usuarioId}")
-  @UsuariosGruposPermissoes.PodeEditar
+  @UsuariosGruposPermissoes.PodeAlterarUsuario
   public UsuarioModel atualizar(@PathVariable Long usuarioId,
                                 @RequestBody @Valid UsuarioInput usuarioInput) {
     var usuarioAtual = cadastroUsuario.buscarOuFalhar(usuarioId);
@@ -76,7 +75,7 @@ public class UsuarioController implements UsuarioControllerOpenApi {
   @Override
   @PutMapping("/{usuarioId}/senha")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  @UsuariosGruposPermissoes.PodeEditar
+  @UsuariosGruposPermissoes.PodeAlterarPropriaSenha
   public void alterarSenha(@PathVariable Long usuarioId, @RequestBody @Valid SenhaInput senha) {
     cadastroUsuario.alterarSenha(usuarioId, senha.getSenhaAtual(), senha.getSenhaNova());
   }
