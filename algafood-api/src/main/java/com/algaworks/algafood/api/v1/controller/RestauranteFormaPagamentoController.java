@@ -12,6 +12,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import static com.algaworks.algafood.core.security.CheckSecurity.Restaurantes;
+
 @RestController
 @RequestMapping(value = "/v1/restaurantes/{restauranteId}/formas-pagamento", produces = MediaType.APPLICATION_JSON_VALUE)
 public class RestauranteFormaPagamentoController implements RestauranteFormaPagamentoControllerOpenApi {
@@ -25,6 +27,7 @@ public class RestauranteFormaPagamentoController implements RestauranteFormaPaga
   @Autowired
   private FormaDePagamentoModelAssembler formaDePagamentoModelAssembler;
 
+  @Restaurantes.PodeConsultar
   @Override
   @GetMapping
   public CollectionModel<FormaDePagamentoModel> listar(@PathVariable Long restauranteId) {
@@ -41,6 +44,7 @@ public class RestauranteFormaPagamentoController implements RestauranteFormaPaga
     return formasDePagamentoModel;
   }
 
+  @Restaurantes.PodeGerenciarFuncionamento
   @Override
   @PutMapping("/{formaPagamentoId}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -49,6 +53,7 @@ public class RestauranteFormaPagamentoController implements RestauranteFormaPaga
     return ResponseEntity.noContent().build();
   }
 
+  @Restaurantes.PodeGerenciarFuncionamento
   @Override
   @DeleteMapping("/{formaPagamentoId}")
   @ResponseStatus(HttpStatus.NO_CONTENT)

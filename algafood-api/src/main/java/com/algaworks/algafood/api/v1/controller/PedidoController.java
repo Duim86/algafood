@@ -30,6 +30,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.Map;
 
+import static com.algaworks.algafood.core.security.CheckSecurity.Pedidos;
+
 @RestController
 @RequestMapping(path = "/v1/pedidos", produces = MediaType.APPLICATION_JSON_VALUE)
 public class PedidoController implements PedidoControllerOpenApi {
@@ -56,6 +58,7 @@ public class PedidoController implements PedidoControllerOpenApi {
   @Autowired
   private AlgaSecurity algaSecurity;
 
+  @Pedidos.PodePesquisar
   @Override
   @GetMapping
   public PagedModel<PedidoResumoModel> pesquisar(PedidoFilter filtro,
@@ -70,6 +73,7 @@ public class PedidoController implements PedidoControllerOpenApi {
             .toModel(pedidosPage, pedidoResumoModelAssembler);
   }
 
+  @Pedidos.PodeBuscar
   @Override
   @GetMapping("/{codigoPedido}")
   public PedidoModel buscar(@PathVariable String codigoPedido) {
@@ -81,6 +85,7 @@ public class PedidoController implements PedidoControllerOpenApi {
   @Override
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
+  @Pedidos.PodeCriar
   public PedidoModel salvar(@Valid @RequestBody PedidoInput pedidoInput) {
     try {
       Pedido novoPedido = pedidoInputDisassembler.toDomainObject(pedidoInput);

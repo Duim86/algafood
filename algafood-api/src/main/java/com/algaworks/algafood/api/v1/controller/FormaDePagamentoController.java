@@ -6,6 +6,7 @@ import com.algaworks.algafood.api.v1.disassembler.FormaDePagamentoInputDisassemb
 import com.algaworks.algafood.api.v1.model.FormaDePagamentoModel;
 import com.algaworks.algafood.api.v1.model.input.FormaDePagamentoInput;
 import com.algaworks.algafood.api.v1.openapi.controller.FormaDePagamentoControllerOpenApi;
+import com.algaworks.algafood.core.security.CheckSecurity;
 import com.algaworks.algafood.domain.repository.FormaDePagamentoRepository;
 import com.algaworks.algafood.domain.service.CadastroFormaDePagamentoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,8 @@ import org.springframework.web.filter.ShallowEtagHeaderFilter;
 import javax.validation.Valid;
 import java.time.OffsetDateTime;
 import java.util.concurrent.TimeUnit;
+
+import static com.algaworks.algafood.core.security.CheckSecurity.*;
 
 @RestController
 @RequestMapping(value = "/v1/formas-de-pagamento", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -43,6 +46,7 @@ public class FormaDePagamentoController implements FormaDePagamentoControllerOpe
 
   @Override
   @GetMapping
+  @FormasPagamento.PodeConsultar
   public ResponseEntity<CollectionModel<FormaDePagamentoModel>> listar(ServletWebRequest request){
     ShallowEtagHeaderFilter.disableContentCaching(request.getRequest());
 
@@ -66,6 +70,7 @@ public class FormaDePagamentoController implements FormaDePagamentoControllerOpe
 
   @Override
   @GetMapping("/{formaDePagamentoId}")
+  @FormasPagamento.PodeConsultar
   public ResponseEntity<FormaDePagamentoModel> buscar(ServletWebRequest request, @PathVariable Long formaDePagamentoId){
     ShallowEtagHeaderFilter.disableContentCaching(request.getRequest());
 
@@ -96,6 +101,7 @@ public class FormaDePagamentoController implements FormaDePagamentoControllerOpe
   @Override
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
+  @FormasPagamento.PodeEditar
   public FormaDePagamentoModel salvar(@RequestBody @Valid FormaDePagamentoInput formaDePagamentoInput) {
     return formaDePagamentoModelAssembler
             .toModel(formaDePagamentoRepository
@@ -105,6 +111,7 @@ public class FormaDePagamentoController implements FormaDePagamentoControllerOpe
 
   @Override
   @PutMapping("/{formaDePagamentoId}")
+  @FormasPagamento.PodeEditar
   public FormaDePagamentoModel atualizar(@RequestBody @Valid FormaDePagamentoInput formaDePagamentoInput,
                                          @PathVariable Long formaDePagamentoId) {
 
@@ -116,6 +123,7 @@ public class FormaDePagamentoController implements FormaDePagamentoControllerOpe
   @Override
   @DeleteMapping("/{formaDePagamentoId}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
+  @FormasPagamento.PodeEditar
   public void excluir(@PathVariable Long formaDePagamentoId){
     cadastroFormaDePagamento.excluir(formaDePagamentoId);
   }

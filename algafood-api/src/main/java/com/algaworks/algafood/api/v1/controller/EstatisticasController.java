@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+import static com.algaworks.algafood.core.security.CheckSecurity.Estatisticas;
+
 @RestController
 @RequestMapping("/v1/estatisticas")
 public class EstatisticasController implements EstatisticasControllerOpenApi {
@@ -37,6 +39,7 @@ public class EstatisticasController implements EstatisticasControllerOpenApi {
 
   @Override
   @GetMapping(path = "/vendas-diarias", produces = MediaType.APPLICATION_JSON_VALUE)
+  @Estatisticas.PodeConsultar
   public List<VendaDiaria> consultarVendasDiarias(VendaDiariaFilter filtro,
                                                   @RequestParam(required = false, defaultValue = "+00:00") String timeOffset){
     return vendaQueryService.consultarVendasDiarias(filtro, timeOffset);
@@ -44,6 +47,7 @@ public class EstatisticasController implements EstatisticasControllerOpenApi {
 
   @Override
   @GetMapping(path = "/vendas-diarias", produces = MediaType.APPLICATION_PDF_VALUE)
+  @Estatisticas.PodeConsultar
   public ResponseEntity<byte[]> consultarVendasDiariasPdf(VendaDiariaFilter filtro,
                                                           @RequestParam(required = false, defaultValue = "+00:00") String timeOffset) throws JRException {
 
@@ -60,6 +64,7 @@ public class EstatisticasController implements EstatisticasControllerOpenApi {
 
   @Override
   @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+  @Estatisticas.PodeConsultar
   public EstatisticasModel estatisticas() {
     var estatisticasModel = new EstatisticasModel();
 

@@ -12,6 +12,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import static com.algaworks.algafood.core.security.CheckSecurity.Restaurantes;
+
 @RestController
 @RequestMapping(value = "/v1/restaurantes/{restauranteId}/responsaveis", produces = MediaType.APPLICATION_JSON_VALUE)
 public class RestauranteUsuarioResponsavelController implements RestauranteUsuarioResponsavelControllerOpenApi {
@@ -25,6 +27,7 @@ public class RestauranteUsuarioResponsavelController implements RestauranteUsuar
   @Autowired
   private AlgaLinks algaLinks;
 
+  @Restaurantes.PodeConsultar
   @Override
   @GetMapping
   public CollectionModel<UsuarioModel> listar(@PathVariable Long restauranteId) {
@@ -44,6 +47,7 @@ public class RestauranteUsuarioResponsavelController implements RestauranteUsuar
     return usuariosModel;
   }
 
+  @Restaurantes.PodeGerenciarCadastro
   @Override
   @PutMapping("/{usuarioId}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -53,6 +57,7 @@ public class RestauranteUsuarioResponsavelController implements RestauranteUsuar
     return ResponseEntity.noContent().build();
   }
 
+  @Restaurantes.PodeGerenciarCadastro
   @Override
   @DeleteMapping("/{usuarioId}")
   @ResponseStatus(HttpStatus.NO_CONTENT)

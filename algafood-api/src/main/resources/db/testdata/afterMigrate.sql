@@ -130,23 +130,16 @@ VALUES (1, 'Gerente'),
        (4, 'Cadastrador');
 
 INSERT INTO permissao (id, nome, descricao)
-VALUES (1, 'CONSULTAR_COZINHAS', 'Permite consultar cozinhas'),
-       (2, 'EDITAR_COZINHAS', 'Permite editar cozinhas'),
-       (3, 'CONSULTAR_FORMAS_PAGAMENTO', 'Permite consultar formas de pagamento'),
-       (4, 'EDITAR_FORMAS_PAGAMENTO', 'Permite criar ou editar formas de pagamento'),
-       (5, 'CONSULTAR_CIDADES', 'Permite consultar cidades'),
-       (6, 'EDITAR_CIDADES', 'Permite criar ou editar cidades'),
-       (7, 'CONSULTAR_ESTADOS', 'Permite consultar estados'),
-       (8, 'EDITAR_ESTADOS', 'Permite criar ou editar estados'),
-       (9, 'CONSULTAR_USUARIOS', 'Permite consultar usuários'),
-       (10, 'EDITAR_USUARIOS', 'Permite criar ou editar usuários'),
-       (11, 'CONSULTAR_RESTAURANTES', 'Permite consultar restaurantes'),
-       (12, 'EDITAR_RESTAURANTES', 'Permite criar, editar ou gerenciar restaurantes'),
-       (13, 'CONSULTAR_PRODUTOS', 'Permite consultar produtos'),
-       (14, 'EDITAR_PRODUTOS', 'Permite criar ou editar produtos'),
-       (15, 'CONSULTAR_PEDIDOS', 'Permite consultar pedidos'),
-       (16, 'GERENCIAR_PEDIDOS', 'Permite gerenciar pedidos'),
-       (17, 'GERAR_RELATORIOS', 'Permite gerar relatórios');
+VALUES (1, 'EDITAR_COZINHAS', 'Permite editar cozinhas'),
+       (2, 'EDITAR_FORMAS_PAGAMENTO', 'Permite criar ou editar formas de pagamento'),
+       (3, 'EDITAR_CIDADES', 'Permite criar ou editar cidades'),
+       (4, 'EDITAR_ESTADOS', 'Permite criar ou editar estados'),
+       (5, 'CONSULTAR_USUARIOS', 'Permite consultar usuários'),
+       (6, 'EDITAR_USUARIOS', 'Permite criar ou editar usuários'),
+       (7, 'EDITAR_RESTAURANTES', 'Permite criar, editar ou gerenciar restaurantes'),
+       (8, 'CONSULTAR_PEDIDOS', 'Permite consultar pedidos'),
+       (9, 'GERENCIAR_PEDIDOS', 'Permite gerenciar pedidos'),
+       (10, 'GERAR_RELATORIOS', 'Permite gerar relatórios');
 
 # Adiciona todas as permissoes no grupo do gerente
 INSERT INTO grupo_permissao (grupo_id, permissao_id)
@@ -160,7 +153,7 @@ FROM permissao
 WHERE nome LIKE 'CONSULTAR_%';
 
 INSERT INTO grupo_permissao (grupo_id, permissao_id)
-VALUES (2, 14);
+SELECT 2, id FROM permissao WHERE nome = 'EDITAR_RESTAURANTES';
 
 # Adiciona permissoes no grupo do auxiliar
 INSERT INTO grupo_permissao (grupo_id, permissao_id)
@@ -200,29 +193,29 @@ VALUES (1, 1),
        (4, 4);
 
 INSERT INTO restaurante_usuario_responsavel (restaurante_id, usuario_id)
-VALUES (1, 4),
-       (3, 4);
+VALUES (1, 5),
+       (3, 5);
 
 INSERT INTO pedido (id, codigo, restaurante_id, cliente_id, forma_de_pagamento_id, endereco_cidade_id, endereco_cep,
                     endereco_logradouro, endereco_numero, endereco_complemento, endereco_bairro,
                     status, data_criacao, subtotal, taxa_frete, valor_total)
-VALUES (1, '5b084069-ff49-4549-8a53-748ee33979ff', 3, 1, 2, 1, '38400-111', 'Rua Acre', '300', 'Casa 2', 'Centro',
+VALUES (1, '5b084069-ff49-4549-8a53-748ee33979ff', 3, 7, 2, 1, '38400-111', 'Rua Acre', '300', 'Casa 2', 'Centro',
         'CRIADO', '2021-06-17 17:52:51', 79, 0, 79),
-       (2, 'b172992b-37a7-4a07-8e06-cf230bcb186a', 2, 2, 1, 1, '38400-000', 'Rua Floriano Peixoto', '500', 'Apto 801',
+       (2, 'b172992b-37a7-4a07-8e06-cf230bcb186a', 2, 6, 1, 1, '38400-000', 'Rua Floriano Peixoto', '500', 'Apto 801',
         'Brasil',
         'CRIADO', '2021-06-18 17:52:51', 125.5, 5, 130.50),
-       (3, '3b084069-ff49-4549-8a53-748ee33979ff', 3, 2, 2, 1, '38400-111', 'Rua Acre', '300', 'Casa 2', 'Centro',
+       (3, '3b084069-ff49-4549-8a53-748ee33979ff', 3, 7, 2, 1, '38400-111', 'Rua Acre', '300', 'Casa 2', 'Centro',
         'CONFIRMADO', '2021-06-21 17:52:51', 45, 12, 57),
-       (4, 'l172992b-37a7-4a07-8e06-cf230bcb186a', 1, 3, 1, 1, '38400-000', 'Rua Floriano Peixoto', '500', 'Apto 801',
+       (4, 'l172992b-37a7-4a07-8e06-cf230bcb186a', 1, 6, 1, 1, '38400-000', 'Rua Floriano Peixoto', '500', 'Apto 801',
         'Brasil',
         'ENTREGUE', '2021-06-20 17:52:51', 298.90, 10, 308.90),
-       (5, 'l372992b-37a7-4a07-8e06-cf230bcb186a', 3, 1, 1, 1, '38400-000', 'Rua Floriano Peixoto', '500', 'Apto 801',
+       (5, 'l372992b-37a7-4a07-8e06-cf230bcb186a', 3, 6, 1, 1, '38400-000', 'Rua Floriano Peixoto', '500', 'Apto 801',
         'Brasil',
         'CONFIRMADO', '2021-06-19 17:52:51', 95.25, 7, 102.25),
-       (6, 'l372992b-3ea7-4a07-8e06-cf230bcb186a', 1, 1, 1, 1, '38400-000', 'Rua Floriano Peixoto', '500', 'Apto 801',
+       (6, 'l372992b-3ea7-4a07-8e06-cf230bcb186a', 1, 7, 1, 1, '38400-000', 'Rua Floriano Peixoto', '500', 'Apto 801',
         'Brasil',
         'ENTREGUE', '2021-06-19 17:52:51', 95.25, 7, 102.25),
-       (7, 'l372992b-37ac-4a07-8e06-cf230bcb186a', 2, 1, 1, 1, '38400-000', 'Rua Floriano Peixoto', '500', 'Apto 801',
+       (7, 'l372992b-37ac-4a07-8e06-cf230bcb186a', 2, 6, 1, 1, '38400-000', 'Rua Floriano Peixoto', '500', 'Apto 801',
         'Brasil',
         'ENTREGUE', '2021-06-19 01:52:51', 95.25, 7, 102.25);
 

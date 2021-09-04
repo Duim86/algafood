@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
+import static com.algaworks.algafood.core.security.CheckSecurity.Restaurantes;
+
 @RestController
 @RequestMapping(value = "/v1/restaurantes/{restauranteId}/produtos", produces = MediaType.APPLICATION_JSON_VALUE)
 public class RestauranteProdutoController implements RestauranteProdutoControllerOpenApi {
@@ -44,6 +46,7 @@ public class RestauranteProdutoController implements RestauranteProdutoControlle
     this.algaLinks = algaLinks;
   }
 
+  @Restaurantes.PodeConsultar
   @Override
   @GetMapping
   public CollectionModel<ProdutoModel> listar(@PathVariable Long restauranteId,
@@ -61,6 +64,7 @@ public class RestauranteProdutoController implements RestauranteProdutoControlle
             .add(algaLinks.linkToProdutos(restauranteId));
   }
 
+  @Restaurantes.PodeConsultar
   @Override
   @GetMapping("/{produtoId}")
   public ProdutoModel buscar(@PathVariable Long restauranteId, @PathVariable Long produtoId) {
@@ -69,6 +73,7 @@ public class RestauranteProdutoController implements RestauranteProdutoControlle
     return produtoModelAssembler.toModel(produto);
   }
 
+  @Restaurantes.PodeGerenciarFuncionamento
   @Override
   @PostMapping
   public ProdutoModel adicionar(@PathVariable Long restauranteId, @RequestBody @Valid ProdutoInput produtoInput) {
@@ -80,6 +85,7 @@ public class RestauranteProdutoController implements RestauranteProdutoControlle
     return produtoModelAssembler.toModel(cadastroProduto.salvar(produto));
   }
 
+  @Restaurantes.PodeGerenciarFuncionamento
   @Override
   @PutMapping("/{produtoId}")
   public ProdutoModel atualizar(@PathVariable Long restauranteId, @PathVariable Long produtoId,

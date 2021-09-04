@@ -24,6 +24,8 @@ import javax.validation.Valid;
 import java.io.IOException;
 import java.util.List;
 
+import static com.algaworks.algafood.core.security.CheckSecurity.Restaurantes;
+
 @RestController
 @RequestMapping(path ="/v1/restaurantes/{restauranteId}/produtos/{produtoId}/foto", produces = MediaType.APPLICATION_JSON_VALUE)
 public class RestauranteProdutoFotoController implements RestauranteProdutoFotoControllerOpenApi {
@@ -46,6 +48,7 @@ public class RestauranteProdutoFotoController implements RestauranteProdutoFotoC
   }
 
 
+  @Restaurantes.PodeConsultar
   @Override
   @GetMapping
   public FotoProdutoModel buscar(@PathVariable Long restauranteId,
@@ -86,6 +89,7 @@ public class RestauranteProdutoFotoController implements RestauranteProdutoFotoC
   }
 
 
+  @Restaurantes.PodeGerenciarFuncionamento
   @Override
   @PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   public FotoProdutoModel atualizarFoto(@PathVariable Long restauranteId,
@@ -111,6 +115,7 @@ public class RestauranteProdutoFotoController implements RestauranteProdutoFotoC
 
   }
 
+  @Restaurantes.PodeGerenciarFuncionamento
   @Override
   @DeleteMapping
   @ResponseStatus(HttpStatus.NO_CONTENT)

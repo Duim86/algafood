@@ -36,8 +36,11 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
   @Autowired
   private UserDetailsService userDetailsService;
 
-  @Autowired
-  private JwtKeyStoreProperties jwtKeyStoreProperties;
+  private final JwtKeyStoreProperties jwtKeyStoreProperties;
+
+  public AuthorizationServerConfig(JwtKeyStoreProperties jwtKeyStoreProperties) {
+    this.jwtKeyStoreProperties = jwtKeyStoreProperties;
+  }
 
   @Override
   public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
@@ -45,7 +48,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
               .withClient("algafood-web")
               .secret(passwordEncoder.encode("web123"))
               .authorizedGrantTypes("password", "refresh_token")
-              .scopes("write", "read")
+              .scopes("WRITE", "READ")
               .accessTokenValiditySeconds(60*60)
               .refreshTokenValiditySeconds(60*60)
             .and()
@@ -55,17 +58,17 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
               .withClient("foodanalytics")
               .secret(passwordEncoder.encode(""))
               .authorizedGrantTypes("authorization_code")
-              .scopes("write", "read")
+              .scopes("WRITE", "READ")
               .redirectUris("http://localhost:5500")
             .and()
               .withClient("faturamento")
               .secret(passwordEncoder.encode("faturamento123"))
               .authorizedGrantTypes("client_credentials")
-              .scopes("write", "read")
+              .scopes("WRITE", "READ")
             .and()
               .withClient("webadmin")
               .authorizedGrantTypes("implicit")
-              .scopes("write", "read")
+              .scopes("WRITE", "READ")
               .redirectUris("http://aplicacao-cliente");
   }
 
